@@ -14,6 +14,49 @@ public class AtencionMedica {
 
  private List<DetalleReceta> detallesReceta = new ArrayList<>();
 
+ 
+ 
+ //Getters and setters
+ public String getIdAtencion() {
+	return idAtencion;
+}
+
+ public void setIdAtencion(String idAtencion) {
+	this.idAtencion = idAtencion;
+ }
+
+ public LocalDateTime getFechaAtencion() {
+	return fechaAtencion;
+ }
+
+ public void setFechaAtencion(LocalDateTime fechaAtencion) {
+	this.fechaAtencion = fechaAtencion;
+ }
+
+ public String getDiagnostico() {
+	return diagnostico;
+ }
+
+ public void setDiagnostico(String diagnostico) {
+	this.diagnostico = diagnostico;
+ }
+
+ public String getTratamiento() {
+	return tratamiento;
+ }
+
+ public void setTratamiento(String tratamiento) {
+	this.tratamiento = tratamiento;
+ }
+
+ public List<DetalleReceta> getDetallesReceta() {
+	return detallesReceta;
+ }
+
+ public void setDetallesReceta(List<DetalleReceta> detallesReceta) {
+	this.detallesReceta = detallesReceta;
+ }
+
  public AtencionMedica(String id, LocalDateTime fecha, String diag, String trat) {
      this.idAtencion = id;
      this.fechaAtencion = fecha;
