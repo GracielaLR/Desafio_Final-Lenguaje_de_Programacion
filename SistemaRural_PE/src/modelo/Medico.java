@@ -21,4 +21,30 @@ public class Medico extends Persona {
 	public void emitirReceta(AtencionMedica atencion, DetalleReceta detalle) {
      atencion.agregarDetalleReceta(detalle);
  }
+
+	public String getCmp() {
+		return cmp;
+	}
+
+	public void setCmp(String cmp) {
+		this.cmp = cmp;
+	}
+
+	public String getEspecialidad() {
+		return especialidad;
+	}
+
+	public void setEspecialidad(String especialidad) {
+		this.especialidad = especialidad;
+	}
+
+	public List<CitaMedica> getCitasAsignadas() {
+		return citasAsignadas;
+	}
+
+	public void setCitasAsignadas(List<CitaMedica> citasAsignadas) {
+		this.citasAsignadas = citasAsignadas;
+	}
+	
+	
 }
