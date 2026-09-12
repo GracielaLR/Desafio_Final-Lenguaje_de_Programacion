@@ -31,4 +31,42 @@ public class CitaMedica {
     
     public EstadoCita getEstado() {return estado; }
 
+	public String getIdCita() {
+		return idCita;
+	}
+
+	public void setIdCita(String idCita) {
+		this.idCita = idCita;
+	}
+
+	public LocalDateTime getFechaHora() {
+		return fechaHora;
+	}
+
+	public void setFechaHora(LocalDateTime fechaHora) {
+		this.fechaHora = fechaHora;
+	}
+
+	public String getMotivoConsulta() {
+		return motivoConsulta;
+	}
+
+	public void setMotivoConsulta(String motivoConsulta) {
+		this.motivoConsulta = motivoConsulta;
+	}
+
+	public AtencionMedica getAtencionMedica() {
+		return atencionMedica;
+	}
+
+	public void setAtencionMedica(AtencionMedica atencionMedica) {
+		this.atencionMedica = atencionMedica;
+	}
+
+	public void setEstado(EstadoCita estado) {
+		this.estado = estado;
+	}
+
+    
+    
 }
