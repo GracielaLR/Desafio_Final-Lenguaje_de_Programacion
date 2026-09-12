@@ -22,5 +22,4 @@ public class Medicamento {
     
     public int getStockDisponible() {return stockDisponible;}
     
-    
 }
