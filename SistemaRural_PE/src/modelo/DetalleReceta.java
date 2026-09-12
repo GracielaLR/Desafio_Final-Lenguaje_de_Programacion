@@ -17,4 +17,22 @@ public class DetalleReceta {
     //La cantidad recetada del medicamento.
     public Medicamento getMedicamento() { return medicamento; }
     public int getCantidad() { return cantidad; }
+
+	public String getIndicaciones() {
+		return indicaciones;
+	}
+
+	public void setIndicaciones(String indicaciones) {
+		this.indicaciones = indicaciones;
+	}
+
+	public void setCantidad(int cantidad) {
+		this.cantidad = cantidad;
+	}
+
+	public void setMedicamento(Medicamento medicamento) {
+		this.medicamento = medicamento;
+	}
+    
+    
 }
