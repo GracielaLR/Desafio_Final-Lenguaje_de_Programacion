@@ -10,7 +10,37 @@ public class Paciente extends Persona {
  private String tipoSeguro;
  private List<CitaMedica> citasMedicas = new ArrayList<>(); 
 
- 
+ //Getters and Setters
+ public String getNumeroHistoriaClinica() {
+	return numeroHistoriaClinica;
+}
+
+
+ public void setNumeroHistoriaClinica(String numeroHistoriaClinica) {
+	this.numeroHistoriaClinica = numeroHistoriaClinica;
+ }
+
+
+ public String getTipoSeguro() {
+	return tipoSeguro;
+ }
+
+
+ public void setTipoSeguro(String tipoSeguro) {
+	this.tipoSeguro = tipoSeguro;
+ }
+
+
+ public List<CitaMedica> getCitasMedicas() {
+	return citasMedicas;
+ }
+
+
+ public void setCitasMedicas(List<CitaMedica> citasMedicas) {
+	this.citasMedicas = citasMedicas;
+ }
+
+
  //Clase solicitarCita con parámetro objeto de CitaMedica
  //Agregar objeto de clase a la Lista citasMedicas
  public void solicitarCita(CitaMedica cita) {
