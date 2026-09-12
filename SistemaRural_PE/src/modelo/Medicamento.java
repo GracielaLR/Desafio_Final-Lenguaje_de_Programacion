@@ -21,5 +21,31 @@ public class Medicamento {
     public String getNombre() {return nombre;}
     
     public int getStockDisponible() {return stockDisponible;}
+
+	public String getIdMedicamento() {
+		return idMedicamento;
+	}
+
+	public void setIdMedicamento(String idMedicamento) {
+		this.idMedicamento = idMedicamento;
+	}
+
+	public LocalDate getFechaVencimiento() {
+		return fechaVencimiento;
+	}
+
+	public void setFechaVencimiento(LocalDate fechaVencimiento) {
+		this.fechaVencimiento = fechaVencimiento;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public void setStockDisponible(int stockDisponible) {
+		this.stockDisponible = stockDisponible;
+	}
+    
+    
     
 }
