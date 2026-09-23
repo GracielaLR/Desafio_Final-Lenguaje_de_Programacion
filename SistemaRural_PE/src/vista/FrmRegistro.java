@@ -103,7 +103,7 @@ public class FrmRegistro extends JFrame {
         contentPane.add(txtApellidos);
 
         txtMotivo = new JTextField();
-        txtMotivo.setBounds(154, 170, 235, 108);
+        txtMotivo.setBounds(18, 188, 371, 90);
         contentPane.add(txtMotivo);
 
         // Botón Registrar
@@ -133,7 +133,7 @@ public class FrmRegistro extends JFrame {
         
         JLabel lblMotivo = new JLabel("Motivo de la consulta:");
         lblMotivo.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblMotivo.setBounds(10, 186, 169, 73);
+        lblMotivo.setBounds(20, 161, 160, 20);
         contentPane.add(lblMotivo);
 
      // EVENTO: GUARDAR
