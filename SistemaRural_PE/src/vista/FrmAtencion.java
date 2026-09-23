@@ -211,11 +211,46 @@ public class FrmAtencion extends JFrame implements ActionListener {
             dispose();
         });
     }
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnImprimirReceta) {
-			actionPerformedBtnGuardar_1JButton(e);
-		}
-	}
-	protected void actionPerformedBtnGuardar_1JButton(ActionEvent e) {
-	}
+ // ==========================================
+    // EVENTO 4: IMPRIMIR RECETA MÉDICA
+    // ==========================================
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnImprimirReceta) {
+            generarImpresionReceta();
+        }
+    }
+
+    private void generarImpresionReceta() {
+        String paciente = txtNombrePaciente.getText().trim();
+        String diagnostico = txtDiagnostico.getText().trim();
+        String tratamiento = txtTratamiento.getText().trim();
+
+        // Validación: No imprimir si no hay datos
+        if (paciente.isEmpty() || tratamiento.isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Error: Debe buscar un paciente y escribir el tratamiento antes de imprimir la receta.", 
+                "Receta vacía", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Diseño del ticket/receta usando manipulación de Strings
+        String formatoReceta = 
+            "==========================================\n" +
+            "       RECETA MÉDICA - MINSA RURAL        \n" +
+            "==========================================\n" +
+            "Paciente : " + paciente + "\n" +
+            "Fecha    : " + LocalDate.now() + "\n" +
+            "------------------------------------------\n" +
+            "DIAGNÓSTICO:\n" + diagnostico + "\n\n" +
+            "PRESCRIPCIÓN / TRATAMIENTO:\n" + tratamiento + "\n" +
+            "==========================================\n" +
+            "Firma Médico: " + medicoTurno.getNombreCompleto() + "\n" +
+            "CMP         : " + medicoTurno.getCmp() + "\n" +
+            "==========================================";
+
+        // Mostrar la receta simulando una impresión
+        JOptionPane.showMessageDialog(this, formatoReceta, "Vista Previa de Impresión", JOptionPane.INFORMATION_MESSAGE);
+    }
 }
