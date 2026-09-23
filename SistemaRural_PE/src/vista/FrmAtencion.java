@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 
-public class FrmAtencion extends JFrame {
+public class FrmAtencion extends JFrame implements ActionListener {
 
     private JPanel contentPane;
     private JTextField txtDni;
@@ -28,6 +28,7 @@ public class FrmAtencion extends JFrame {
     // Datos simulados (Mock) para el médico y farmacia
     private Medico medicoTurno;
     private Medicamento amoxicilina;
+    private JButton btnImprimirReceta;
 
     public FrmAtencion() {
         // Inicializar datos en duro para la atención
@@ -101,13 +102,18 @@ public class FrmAtencion extends JFrame {
         scrollTrat.setViewportView(txtTratamiento);
 
         // --- BOTONES DE ACCIÓN ---
-        JButton btnGuardar = new JButton("Guardar Atención y Generar Receta");
-        btnGuardar.setBounds(20, 340, 380, 35);
+        JButton btnGuardar = new JButton("Guardar Atención");
+        btnGuardar.setBounds(20, 344, 183, 30);
         contentPane.add(btnGuardar);
 
         JButton btnVolver = new JButton("Volver al Menú Principal");
         btnVolver.setBounds(20, 420, 380, 30);
         contentPane.add(btnVolver);
+        
+        btnImprimirReceta = new JButton("Imprimir Receta");
+        btnImprimirReceta.addActionListener(this);
+        btnImprimirReceta.setBounds(213, 344, 183, 30);
+        contentPane.add(btnImprimirReceta);
 
 
         // ==========================================
@@ -205,4 +211,11 @@ public class FrmAtencion extends JFrame {
             dispose();
         });
     }
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnImprimirReceta) {
+			actionPerformedBtnGuardar_1JButton(e);
+		}
+	}
+	protected void actionPerformedBtnGuardar_1JButton(ActionEvent e) {
+	}
 }
