@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +60,39 @@ public class FrmRegistro extends JFrame {
         txtDni = new JTextField();
         txtDni.setBounds(154, 68, 235, 20);
         contentPane.add(txtDni);
+        
+     // EVENTO: AUTOCOMPLETAR DATOS AL INGRESAR DNI
+        txtDni.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String dniIngresado = txtDni.getText().trim();
+                
+                // Si el usuario digitó un DNI (ej. 8 dígitos), buscamos en la lista
+                if (dniIngresado.length() >= 8) {
+                    Optional<Paciente> pacienteExistente = dbPacientesMock.stream()
+                        .filter(p -> p.getDni() != null && p.getDni().equals(dniIngresado))
+                        .findFirst();
+
+                    if (pacienteExistente.isPresent()) {
+                        // Si existe, autocompleta y bloquea los campos para evitar sobreescritura accidental
+                        txtNombres.setText(pacienteExistente.get().getNombres());
+                        txtApellidos.setText(pacienteExistente.get().getApellidos());
+                        txtNombres.setEditable(false);
+                        txtApellidos.setEditable(false);
+                    } else {
+                        // Si no existe (es un paciente nuevo), deja los campos libres
+                        txtNombres.setEditable(true);
+                        txtApellidos.setEditable(true);
+                    }
+                } else {
+                    // Limpiar si el usuario borra el DNI
+                    txtNombres.setText("");
+                    txtApellidos.setText("");
+                    txtNombres.setEditable(true);
+                    txtApellidos.setEditable(true);
+                }
+            }
+        });
 
         txtNombres = new JTextField();
         txtNombres.setBounds(154, 99, 235, 20);
