@@ -161,8 +161,9 @@ public class FrmAtencion extends JFrame {
                     if (pacienteOpt.isPresent()) {
                         Paciente paciente = pacienteOpt.get();
                         
-                        Optional<CitaMedica> citaPendiente = paciente.consultarHistorial().stream()
-                            .findFirst(); 
+                        Optional<CitaMedica> citaPendiente = paciente.getCitasMedicas().stream()
+                        	    .filter(c -> c.getEstado() == CitaMedica.EstadoCita.PENDIENTE)
+                        	    .findFirst(); 
 
                         if (citaPendiente.isPresent()) {
                             CitaMedica cita = citaPendiente.get();
