@@ -142,6 +142,12 @@ public class FrmRegistro extends JFrame {
                 try {
                     String dniIngresado = txtDni.getText().trim();
                     
+                    // Validación de DNI: Debe tener exactamente 8 caracteres y ser numérico
+                    if (dniIngresado.length() != 8 || !dniIngresado.matches("[0-9]+")) {
+                        JOptionPane.showMessageDialog(null, "Error: Debe ingresar un DNI válido de exactamente 8 dígitos numéricos.");
+                        return; // Detiene la ejecución del botón
+                    }
+                    
                     // 1. Verificar si el paciente ya existe en la base de datos simulada
                     Optional<Paciente> pacienteExistente = dbPacientesMock.stream()
                         .filter(p -> p.getDni() != null && p.getDni().equals(dniIngresado))
