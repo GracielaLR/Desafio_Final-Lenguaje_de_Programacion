@@ -96,9 +96,10 @@ public class FrmConsulta extends JFrame {
         // EVENTO: VOLVER
         btnVolver.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                FrmRegistro registro = new FrmRegistro();
-                registro.setVisible(true);
-                dispose(); // Cierra esta ventana
+                // Instancia el menú principal y cierra la ventana actual
+                FrmPrincipal principal = new FrmPrincipal();
+                principal.setVisible(true);
+                dispose();
             }
         });
     }

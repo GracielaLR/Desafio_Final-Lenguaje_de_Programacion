@@ -129,12 +129,13 @@ public class FrmRegistro extends JFrame {
             }
         });
 
-        // EVENTO: NAVEGAR
+        // EVENTO: NAVEGAR (Volver al menú)
         btnIrConsulta.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                FrmConsulta consulta = new FrmConsulta();
-                consulta.setVisible(true);
-                dispose(); // Cierra la ventana actual
+                // Instancia el menú principal y cierra la ventana actual
+                FrmPrincipal principal = new FrmPrincipal();
+                principal.setVisible(true);
+                dispose();
             }
         });
     }
