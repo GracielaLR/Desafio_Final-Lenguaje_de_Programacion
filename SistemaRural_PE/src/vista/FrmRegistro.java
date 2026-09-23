@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -100,23 +101,39 @@ public class FrmRegistro extends JFrame {
         lblMotivo.setBounds(10, 186, 169, 73);
         contentPane.add(lblMotivo);
 
-        // EVENTO: GUARDAR
+     // EVENTO: GUARDAR
         btnRegistrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Paciente p = new Paciente();
-                    p.setDni(txtDni.getText());
-                    p.setNombres(txtNombres.getText());
-                    p.setApellidos(txtApellidos.getText());
-                    p.setNumeroHistoriaClinica("HC-" + (dbPacientesMock.size() + 1));
+                    String dniIngresado = txtDni.getText().trim();
+                    
+                    // 1. Verificar si el paciente ya existe en la base de datos simulada
+                    Optional<Paciente> pacienteExistente = dbPacientesMock.stream()
+                        .filter(p -> p.getDni() != null && p.getDni().equals(dniIngresado))
+                        .findFirst();
 
+                    Paciente p;
+                    if (pacienteExistente.isPresent()) {
+                        // Si existe, usamos el mismo objeto (mantiene su historial intacto)
+                        p = pacienteExistente.get();
+                    } else {
+                        // Si es nuevo, lo creamos y lo añadimos a la lista
+                        p = new Paciente();
+                        p.setDni(dniIngresado);
+                        p.setNombres(txtNombres.getText());
+                        p.setApellidos(txtApellidos.getText());
+                        p.setNumeroHistoriaClinica("HC-" + (dbPacientesMock.size() + 1));
+                        dbPacientesMock.add(p);
+                    }
+
+                    // 2. Programar la nueva cita
                     CitaMedica cita = new CitaMedica();
+                    cita.setIdCita("C" + (p.getCitasMedicas().size() + 1));
                     cita.setFechaHora(LocalDateTime.now());
                     cita.setMotivoConsulta(txtMotivo.getText());
                     cita.programarCita();
 
-                    p.solicitarCita(cita);
-                    dbPacientesMock.add(p); // Guardar en memoria
+                    p.solicitarCita(cita); // Asignar la cita al paciente
 
                     JOptionPane.showMessageDialog(null, "Cita registrada exitosamente.");
                     

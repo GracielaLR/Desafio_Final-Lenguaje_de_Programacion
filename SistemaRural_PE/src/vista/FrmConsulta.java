@@ -60,14 +60,13 @@ public class FrmConsulta extends JFrame {
         btnVolver.setBounds(20, 310, 180, 30);
         contentPane.add(btnVolver);
 
-        // EVENTO: BUSCAR (Aplicación de Programación Funcional)
+     // EVENTO: BUSCAR (Aplicación de Programación Funcional)
         btnBuscar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String dniBuscado = txtBuscarDni.getText();
+                String dniBuscado = txtBuscarDni.getText().trim();
                 txtConsola.setText("");
 
                 try {
-                    // Uso de API Stream y Expresiones Lambda para búsqueda (Cumple Rúbrica Avanzada)
                     Optional<Paciente> pacienteEncontrado = FrmRegistro.dbPacientesMock.stream()
                         .filter(p -> p.getDniEnmascarado().contains(dniBuscado.substring(Math.max(0, dniBuscado.length() - 4))) || p.getDniEnmascarado().equals("****" + dniBuscado))
                         .findFirst();
@@ -76,13 +75,26 @@ public class FrmConsulta extends JFrame {
                         Paciente p = pacienteEncontrado.get();
                         txtConsola.append("--- DATOS DEL PACIENTE ---\n");
                         txtConsola.append("Nombre: " + p.getNombreCompleto() + "\n");
-                        // Ley 29733: Datos sensibles no expuestos
                         txtConsola.append("DNI Seguro: " + p.getDniEnmascarado() + "\n");
                         txtConsola.append("Historia Clínica: " + p.getNumeroHistoriaClinica() + "\n\n");
                         
-                        txtConsola.append("--- HISTORIAL DE CITAS ---\n");
-                        if(p.consultarHistorial().isEmpty() && FrmRegistro.dbPacientesMock.size() > 0) {
-                             txtConsola.append("Tiene citas programadas pero aún no atendidas.\n");
+                        txtConsola.append("--- HISTORIAL DE ATENCIONES ---\n");
+                        
+                        // Extraemos la lista de citas que ya fueron ATENDIDAS
+                        java.util.List<CitaMedica> historial = p.consultarHistorial();
+                        
+                        if (historial.isEmpty()) {
+                             txtConsola.append("No hay atenciones médicas finalizadas (Solo citas pendientes).\n");
+                        } else {
+                             // Programación Funcional: Imprimir cada atención registrada
+                             historial.forEach(cita -> {
+                                 txtConsola.append("Fecha: " + cita.getFechaHora().toLocalDate() + "\n");
+                                 txtConsola.append("Motivo de consulta: " + cita.getMotivoConsulta() + "\n");
+                                 if(cita.getAtencionMedica() != null) {
+                                     txtConsola.append(">> " + cita.getAtencionMedica().generarInforme() + "\n");
+                                 }
+                                 txtConsola.append("--------------------------------------------------\n");
+                             });
                         }
                     } else {
                         txtConsola.append("No se encontró ningún paciente con ese DNI.\n");
