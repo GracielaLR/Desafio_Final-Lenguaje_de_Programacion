@@ -172,9 +172,14 @@ public class FrmRegistro extends JFrame {
 
                     JOptionPane.showMessageDialog(null, "Cita registrada exitosamente.");
                     
-                    // Limpiar campos
-                    txtDni.setText(""); txtNombres.setText(""); 
-                    txtApellidos.setText(""); txtMotivo.setText("");
+                    // Limpiar y restaurar campos para el próximo registro
+                    txtDni.setText(""); 
+                    txtNombres.setText(""); 
+                    txtApellidos.setText(""); 
+                    txtMotivo.setText("");
+                    txtNombres.setEditable(true);
+                    txtApellidos.setEditable(true);
+                    
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
                 }
