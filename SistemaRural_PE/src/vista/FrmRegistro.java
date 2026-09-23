@@ -145,7 +145,16 @@ public class FrmRegistro extends JFrame {
                     // Validación de DNI: Debe tener exactamente 8 caracteres y ser numérico
                     if (dniIngresado.length() != 8 || !dniIngresado.matches("[0-9]+")) {
                         JOptionPane.showMessageDialog(null, "Error: Debe ingresar un DNI válido de exactamente 8 dígitos numéricos.");
-                        return; // Detiene la ejecución del botón
+                        return; 
+                    }
+
+                    String nombres = txtNombres.getText().trim();
+                    String apellidos = txtApellidos.getText().trim();
+
+                    // Validación de Nombres y Apellidos: Solo letras, tildes, ñ y espacios
+                    if (!nombres.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$") || !apellidos.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+                        JOptionPane.showMessageDialog(null, "Error: Los nombres y apellidos solo deben contener letras.");
+                        return; 
                     }
                     
                     // 1. Verificar si el paciente ya existe en la base de datos simulada
