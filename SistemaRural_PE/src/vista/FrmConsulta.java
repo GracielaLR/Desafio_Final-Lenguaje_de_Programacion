@@ -40,8 +40,8 @@ public class FrmConsulta extends JFrame {
     public FrmConsulta() {
         setTitle("Archivo Clínico - Historiales");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // Ampliamos la ventana para darle respiro a la ficha técnica
-        setBounds(100, 100, 980, 620); 
+        // Ampliamos la ventana a 1050px para lograr una ficha técnica perfecta
+        setBounds(100, 100, 1050, 620); 
         setLocationRelativeTo(null);
         contentPane = new JPanel();
         contentPane.setBackground(new Color(245, 247, 250));
@@ -50,40 +50,40 @@ public class FrmConsulta extends JFrame {
         contentPane.setLayout(null);
 
         // HEADER
-        JPanel panelHeader = new JPanel(); panelHeader.setBackground(new Color(0, 102, 204)); panelHeader.setBounds(0, 0, 980, 70); contentPane.add(panelHeader); panelHeader.setLayout(null);
-        JLabel lblTitulo = new JLabel("ARCHIVO CLÍNICO Y GESTIÓN DE ESTADOS"); lblTitulo.setHorizontalAlignment(SwingConstants.CENTER); lblTitulo.setForeground(Color.WHITE); lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22)); lblTitulo.setBounds(0, 18, 964, 30); panelHeader.add(lblTitulo);
+        JPanel panelHeader = new JPanel(); panelHeader.setBackground(new Color(0, 102, 204)); panelHeader.setBounds(0, 0, 1050, 70); contentPane.add(panelHeader); panelHeader.setLayout(null);
+        JLabel lblTitulo = new JLabel("ARCHIVO CLÍNICO Y GESTIÓN DE ESTADOS"); lblTitulo.setHorizontalAlignment(SwingConstants.CENTER); lblTitulo.setForeground(Color.WHITE); lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22)); lblTitulo.setBounds(0, 18, 1034, 30); panelHeader.add(lblTitulo);
 
-        // COLUMNA IZQUIERDA (Más ancha: 420px)
-        JPanel panelBusq = new JPanel(); panelBusq.setBackground(Color.WHITE); panelBusq.setBorder(new TitledBorder(new LineBorder(new Color(180,180,180), 1, true), "1. Buscar Paciente", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0,102,204))); panelBusq.setBounds(20, 85, 420, 80); contentPane.add(panelBusq); panelBusq.setLayout(null);
+        // COLUMNA IZQUIERDA (Ahora mide 460px de ancho)
+        JPanel panelBusq = new JPanel(); panelBusq.setBackground(Color.WHITE); panelBusq.setBorder(new TitledBorder(new LineBorder(new Color(180,180,180), 1, true), "1. Buscar Paciente", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0,102,204))); panelBusq.setBounds(20, 85, 460, 80); contentPane.add(panelBusq); panelBusq.setLayout(null);
         JLabel lblDniBusc = new JLabel("DNI:"); lblDniBusc.setFont(new Font("Segoe UI", Font.PLAIN, 13)); lblDniBusc.setBounds(20, 32, 40, 20); panelBusq.add(lblDniBusc);
-        txtBuscarDni = new JTextField(); txtBuscarDni.setFont(new Font("Segoe UI", Font.BOLD, 14)); txtBuscarDni.setBounds(60, 30, 180, 28); panelBusq.add(txtBuscarDni);
-        JButton btnBuscar = new JButton("Buscar Historial"); btnBuscar.setBackground(new Color(23, 162, 184)); btnBuscar.setForeground(Color.WHITE); btnBuscar.setBounds(250, 30, 150, 28); panelBusq.add(btnBuscar);
+        txtBuscarDni = new JTextField(); txtBuscarDni.setFont(new Font("Segoe UI", Font.BOLD, 14)); txtBuscarDni.setBounds(60, 30, 200, 28); panelBusq.add(txtBuscarDni);
+        JButton btnBuscar = new JButton("Buscar Historial"); btnBuscar.setBackground(new Color(23, 162, 184)); btnBuscar.setForeground(Color.WHITE); btnBuscar.setBounds(275, 30, 160, 28); panelBusq.add(btnBuscar);
 
-        // FICHA TÉCNICA (Alineación corregida y ampliada)
+        // FICHA TÉCNICA (Distribución simétrica y espaciosa)
         JPanel panelFicha = new JPanel(); panelFicha.setBackground(Color.WHITE); panelFicha.setBorder(new TitledBorder(new LineBorder(new Color(180,180,180), 1, true), "2. Ficha Técnica (Ley N.º 29733)", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0,102,204))); 
-        panelFicha.setBounds(20, 175, 420, 180); 
+        panelFicha.setBounds(20, 175, 460, 180); 
         contentPane.add(panelFicha); 
         panelFicha.setLayout(null);
         
-        JLabel lHC = new JLabel("N° HC:"); lHC.setBounds(20,30,60,20); panelFicha.add(lHC); txtHC = crTxt(80,28,100); panelFicha.add(txtHC);
-        JLabel lDni = new JLabel("DNI Seg:"); lDni.setBounds(200,30,70,20); panelFicha.add(lDni); txtDniSeguro = crTxt(270,28,130); panelFicha.add(txtDniSeguro);
+        JLabel lHC = new JLabel("N° HC:"); lHC.setBounds(20,30,60,20); panelFicha.add(lHC); txtHC = crTxt(80,28,120); panelFicha.add(txtHC);
+        JLabel lDni = new JLabel("DNI Seg:"); lDni.setBounds(220,30,70,20); panelFicha.add(lDni); txtDniSeguro = crTxt(290,28,150); panelFicha.add(txtDniSeguro);
         
-        JLabel lNom = new JLabel("Nombres:"); lNom.setBounds(20,65,70,20); panelFicha.add(lNom); txtNombres = crTxt(90,63,310); panelFicha.add(txtNombres);
-        JLabel lApe = new JLabel("Apellidos:"); lApe.setBounds(20,100,70,20); panelFicha.add(lApe); txtApellidos = crTxt(90,98,310); panelFicha.add(txtApellidos);
+        JLabel lNom = new JLabel("Nombres:"); lNom.setBounds(20,65,70,20); panelFicha.add(lNom); txtNombres = crTxt(90,63,350); panelFicha.add(txtNombres);
+        JLabel lApe = new JLabel("Apellidos:"); lApe.setBounds(20,100,70,20); panelFicha.add(lApe); txtApellidos = crTxt(90,98,350); panelFicha.add(txtApellidos);
         
-        JLabel lFec = new JLabel("F. Nac:"); lFec.setBounds(20,135,60,20); panelFicha.add(lFec); txtFechaNac = crTxt(80,133,100); panelFicha.add(txtFechaNac);
-        JLabel lTel = new JLabel("Celular:"); lTel.setBounds(200,135,70,20); panelFicha.add(lTel); txtTelefono = crTxt(270,133,130); panelFicha.add(txtTelefono);
+        JLabel lFec = new JLabel("F. Nac:"); lFec.setBounds(20,135,60,20); panelFicha.add(lFec); txtFechaNac = crTxt(80,133,120); panelFicha.add(txtFechaNac);
+        JLabel lTel = new JLabel("Celular:"); lTel.setBounds(220,135,70,20); panelFicha.add(lTel); txtTelefono = crTxt(290,133,150); panelFicha.add(txtTelefono);
 
         // GESTIÓN DE ESTADOS
-        JPanel panelEst = new JPanel(); panelEst.setBackground(Color.WHITE); panelEst.setBorder(new TitledBorder(new LineBorder(new Color(180,180,180), 1, true), "3. Gestión de Estados", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0,102,204))); panelEst.setBounds(20, 365, 420, 110); contentPane.add(panelEst); panelEst.setLayout(null);
-        JLabel lCita = new JLabel("Cita:"); lCita.setBounds(20,30,40,20); panelEst.add(lCita); cbxCitas = new JComboBox<>(); cbxCitas.setBounds(60,28,340,25); panelEst.add(cbxCitas);
+        JPanel panelEst = new JPanel(); panelEst.setBackground(Color.WHITE); panelEst.setBorder(new TitledBorder(new LineBorder(new Color(180,180,180), 1, true), "3. Gestión de Estados", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0,102,204))); panelEst.setBounds(20, 365, 460, 110); contentPane.add(panelEst); panelEst.setLayout(null);
+        JLabel lCita = new JLabel("Cita:"); lCita.setBounds(20,30,40,20); panelEst.add(lCita); cbxCitas = new JComboBox<>(); cbxCitas.setBounds(60,28,380,25); panelEst.add(cbxCitas);
         cbxEstado = new JComboBox<>(new String[]{"En Proceso / Pendiente", "Consulta Finalizada", "Cancelada"}); cbxEstado.setBounds(20,65,250,25); panelEst.add(cbxEstado);
-        JButton btnAct = new JButton("Actualizar"); btnAct.setBackground(new Color(40,167,69)); btnAct.setForeground(Color.WHITE); btnAct.setBounds(280,65,120,25); panelEst.add(btnAct);
+        JButton btnAct = new JButton("Actualizar Estado"); btnAct.setBackground(new Color(40,167,69)); btnAct.setForeground(Color.WHITE); btnAct.setBounds(290,65,150,25); panelEst.add(btnAct);
 
-        JButton btnVolver = new JButton("Volver al Menú Principal"); btnVolver.setBackground(new Color(108,117,125)); btnVolver.setForeground(Color.WHITE); btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14)); btnVolver.setBounds(20, 490, 420, 45); contentPane.add(btnVolver);
+        JButton btnVolver = new JButton("Volver al Menú Principal"); btnVolver.setBackground(new Color(108,117,125)); btnVolver.setForeground(Color.WHITE); btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14)); btnVolver.setBounds(20, 490, 460, 45); contentPane.add(btnVolver);
 
-        // COLUMNA DERECHA (Consola)
-        JScrollPane scr = new JScrollPane(); scr.setBounds(460, 85, 480, 450); contentPane.add(scr);
+        // COLUMNA DERECHA (Consola - Ahora empieza en el pixel 500)
+        JScrollPane scr = new JScrollPane(); scr.setBounds(500, 85, 510, 450); contentPane.add(scr);
         txtConsola = new JTextArea(); txtConsola.setFont(new Font("Monospaced", Font.PLAIN, 13)); txtConsola.setEditable(false); scr.setViewportView(txtConsola);
 
         // EVENTOS
