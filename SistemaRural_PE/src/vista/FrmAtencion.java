@@ -45,7 +45,6 @@ public class FrmAtencion extends JFrame {
     private static final DateTimeFormatter FMT_HORA = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     static {
-        // CORRECCIÓN POO: Se separan los nombres y apellidos explícitamente para evitar el "null"
         String[] nombres = {"Carlos", "Ana Luisa", "Roberto", "Lucía", "Jorge"};
         String[] apellidos = {"Torres", "Pineda", "Fernández", "Ramírez", "Castillo"};
         String[] esp = {"Medicina General", "Pediatría", "Ginecología", "Cardiología", "Traumatología"};
@@ -176,6 +175,14 @@ public class FrmAtencion extends JFrame {
                     Medicamento medS = dbMedicamentosMock.get(cbxMedicamentos.getSelectedIndex());
                     int cant = (Integer) spnCantidad.getValue();
                     if (cant > medS.getStockDisponible()) { JOptionPane.showMessageDialog(this, "Stock insuficiente."); return; }
+                    
+                    // --- AQUÍ ESTÁ LA CORRECCIÓN CLAVE ---
+                    // Registramos la cita en el historial personal del médico para que FrmConsulta pueda encontrarlo
+                    if (!ms.getCitasAsignadas().contains(cita)) {
+                        ms.getCitasAsignadas().add(cita);
+                    }
+                    // -------------------------------------
+
                     ms.atenderCita(cita); 
                     AtencionMedica atencion = cita.getAtencionMedica(); atencion.setDiagnostico(txtDiagnostico.getText()); atencion.setTratamiento(txtTratamiento.getText());
                     DetalleReceta receta = new DetalleReceta(); receta.setMedicamento(medS); receta.setCantidad(cant); receta.setIndicaciones(txtTratamiento.getText());
