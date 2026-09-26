@@ -10,6 +10,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +44,9 @@ public class FrmRegistro extends JFrame {
 
     // Simulación de Base de Datos de la API RENIEC
     private static Map<String, Paciente> apiReniecMock = new HashMap<>();
+    
+    // Formateador global para la vista (DD-MM-YYYY)
+    private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     
     static {
         // Precargamos datos de prueba realistas para simular la API de RENIEC
@@ -183,7 +187,7 @@ public class FrmRegistro extends JFrame {
         panelDatos.add(lblFechaNac);
 
         txtFechaNac = new JTextField();
-        txtFechaNac.setToolTipText("YYYY-MM-DD");
+        txtFechaNac.setToolTipText("DD-MM-YYYY");
         txtFechaNac.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         txtFechaNac.setBounds(110, 97, 100, 26);
         panelDatos.add(txtFechaNac);
@@ -217,7 +221,7 @@ public class FrmRegistro extends JFrame {
         panelCita.add(txtMotivo);
 
         // --- BOTONES CON FLAT DESIGN ---
-        JButton btnRegistrar = new JButton("✔ Guardar Cita Médica");
+        JButton btnRegistrar = new JButton("Guardar Cita Médica");
         btnRegistrar.setForeground(Color.WHITE);
         btnRegistrar.setBackground(new Color(40, 167, 69)); // Verde Éxito
         btnRegistrar.setFocusPainted(false); // Quitar borde punteado
@@ -252,14 +256,18 @@ public class FrmRegistro extends JFrame {
                         txtNombres.setText(p.getNombres());
                         txtApellidos.setText(p.getApellidos());
                         txtTelefono.setText(p.getTelefono() != null ? p.getTelefono() : "");
-                        txtFechaNac.setText(p.getFechaNacimiento() != null ? p.getFechaNacimiento().toString() : "");
+                        
+                        // Convertir de LocalDate (Sistema) a DD-MM-YYYY (Vista)
+                        txtFechaNac.setText(p.getFechaNacimiento() != null ? p.getFechaNacimiento().format(FORMATO_FECHA) : "");
                         bloquearCamposPersonales(true);
                         
                     } else if (apiReniecMock.containsKey(dniIngresado)) {
                         Paciente pReniec = apiReniecMock.get(dniIngresado);
                         txtNombres.setText(pReniec.getNombres());
                         txtApellidos.setText(pReniec.getApellidos());
-                        txtFechaNac.setText(pReniec.getFechaNacimiento().toString());
+                        
+                        // Convertir de LocalDate (RENIEC) a DD-MM-YYYY (Vista)
+                        txtFechaNac.setText(pReniec.getFechaNacimiento().format(FORMATO_FECHA));
                         txtTelefono.setText(""); 
                         
                         bloquearCamposPersonales(true);
@@ -294,11 +302,12 @@ public class FrmRegistro extends JFrame {
                         return; 
                     }
 
+                    // Transformar de DD-MM-YYYY (Vista) a LocalDate (Sistema)
                     LocalDate fechaNacimiento;
                     try {
-                        fechaNacimiento = LocalDate.parse(txtFechaNac.getText().trim());
+                        fechaNacimiento = LocalDate.parse(txtFechaNac.getText().trim(), FORMATO_FECHA);
                     } catch (DateTimeParseException ex) {
-                        JOptionPane.showMessageDialog(null, "Error: La fecha debe usar el formato YYYY-MM-DD (Ej. 1995-08-25).", "Formato de Fecha", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Error: La fecha debe usar el formato DD-MM-YYYY (Ej. 25-08-1995).", "Formato de Fecha", JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                     
