@@ -92,7 +92,7 @@ public class FrmConsulta extends JFrame {
             Optional<Paciente> pOpt = FrmRegistro.dbPacientesMock.stream().filter(p -> p.getDni() != null && p.getDni().equals(txtBuscarDni.getText().trim())).findFirst();
             if (pOpt.isPresent()) {
                 pacienteActual = pOpt.get(); txtHC.setText(pacienteActual.getNumeroHistoriaClinica()); txtDniSeguro.setText(pacienteActual.getDniEnmascarado()); txtNombres.setText(pacienteActual.getNombres()); txtApellidos.setText(pacienteActual.getApellidos()); txtTelefono.setText(pacienteActual.getTelefono() != null ? pacienteActual.getTelefono() : "N/A"); txtFechaNac.setText(pacienteActual.getFechaNacimiento() != null ? pacienteActual.getFechaNacimiento().format(FMT_F) : "N/A");
-                listaCitasActual = pacienteActual.getCitasMedicas(); for (CitaMedica c : listaCitasActual) cbxCitas.addItem(c.getIdCita() + " - " + c.getFechaHora().toLocalDate().format(FMT_F));
+                listaCitasActual = pacienteActual.getHistorialMedico().getCitas(); for (CitaMedica c : listaCitasActual) cbxCitas.addItem(c.getIdCita() + " - " + c.getFechaHora().toLocalDate().format(FMT_F));
                 imprimirHistorial();
             } else { pacienteActual = null; JOptionPane.showMessageDialog(this, "No se encontró paciente."); }
         });
