@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,360 +27,101 @@ import javax.swing.border.TitledBorder;
 public class FrmConsulta extends JFrame {
 
     private JPanel contentPane;
-    private JTextField txtBuscarDni;
-    private JTextField txtHC;
-    private JTextField txtNombres;
-    private JTextField txtApellidos;
-    private JTextField txtDniSeguro;
-    private JTextField txtFechaNac;
-    private JTextField txtTelefono;
+    private JTextField txtBuscarDni, txtHC, txtNombres, txtApellidos, txtDniSeguro, txtFechaNac, txtTelefono;
     private JTextArea txtConsola;
-    
-    // Componentes para la gestión de estados
-    private JComboBox<String> cbxCitas;
-    private JComboBox<String> cbxEstado;
-    private JButton btnActualizarEstado;
-
-    // Variables de estado temporal de la ventana
+    private JComboBox<String> cbxCitas, cbxEstado;
     private Paciente pacienteActual = null;
     private List<CitaMedica> listaCitasActual = new ArrayList<>();
-    
-    // Formateadores
-    private static final DateTimeFormatter FMT_FECHA = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    private static final DateTimeFormatter FMT_FECHAHORA = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    private static final DateTimeFormatter FMT_F = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter FMT_FH = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                FrmConsulta frame = new FrmConsulta();
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
+    public static void main(String[] args) { EventQueue.invokeLater(() -> { try { new FrmConsulta().setVisible(true); } catch (Exception e) { e.printStackTrace(); } }); }
 
     public FrmConsulta() {
-        setTitle("Archivo Clínico y Gestión de Citas");
+        setTitle("Archivo Clínico - Historiales");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 600, 720); // Ventana más grande y profesional
+        // Ampliamos la ventana para darle respiro a la ficha técnica
+        setBounds(100, 100, 980, 620); 
         setLocationRelativeTo(null);
-        
         contentPane = new JPanel();
         contentPane.setBackground(new Color(245, 247, 250));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        // --- BANNER SUPERIOR ---
-        JPanel panelHeader = new JPanel();
-        panelHeader.setBackground(new Color(0, 102, 204));
-        panelHeader.setBounds(0, 0, 600, 60);
-        contentPane.add(panelHeader);
-        panelHeader.setLayout(null);
+        // HEADER
+        JPanel panelHeader = new JPanel(); panelHeader.setBackground(new Color(0, 102, 204)); panelHeader.setBounds(0, 0, 980, 70); contentPane.add(panelHeader); panelHeader.setLayout(null);
+        JLabel lblTitulo = new JLabel("ARCHIVO CLÍNICO Y GESTIÓN DE ESTADOS"); lblTitulo.setHorizontalAlignment(SwingConstants.CENTER); lblTitulo.setForeground(Color.WHITE); lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22)); lblTitulo.setBounds(0, 18, 964, 30); panelHeader.add(lblTitulo);
 
-        JLabel lblTitulo = new JLabel("ARCHIVO CLÍNICO Y GESTIÓN DE CITAS");
-        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-        lblTitulo.setForeground(Color.WHITE);
-        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        lblTitulo.setBounds(0, 15, 584, 30);
-        panelHeader.add(lblTitulo);
+        // COLUMNA IZQUIERDA (Más ancha: 420px)
+        JPanel panelBusq = new JPanel(); panelBusq.setBackground(Color.WHITE); panelBusq.setBorder(new TitledBorder(new LineBorder(new Color(180,180,180), 1, true), "1. Buscar Paciente", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0,102,204))); panelBusq.setBounds(20, 85, 420, 80); contentPane.add(panelBusq); panelBusq.setLayout(null);
+        JLabel lblDniBusc = new JLabel("DNI:"); lblDniBusc.setFont(new Font("Segoe UI", Font.PLAIN, 13)); lblDniBusc.setBounds(20, 32, 40, 20); panelBusq.add(lblDniBusc);
+        txtBuscarDni = new JTextField(); txtBuscarDni.setFont(new Font("Segoe UI", Font.BOLD, 14)); txtBuscarDni.setBounds(60, 30, 180, 28); panelBusq.add(txtBuscarDni);
+        JButton btnBuscar = new JButton("Buscar Historial"); btnBuscar.setBackground(new Color(23, 162, 184)); btnBuscar.setForeground(Color.WHITE); btnBuscar.setBounds(250, 30, 150, 28); panelBusq.add(btnBuscar);
 
-        // --- PANEL 1: BÚSQUEDA ---
-        JPanel panelBusqueda = new JPanel();
-        panelBusqueda.setBackground(Color.WHITE);
-        panelBusqueda.setBorder(new TitledBorder(new LineBorder(new Color(180, 180, 180), 1, true), "1. Buscar Paciente", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0, 102, 204)));
-        panelBusqueda.setBounds(20, 75, 545, 70);
-        contentPane.add(panelBusqueda);
-        panelBusqueda.setLayout(null);
-
-        JLabel lblDniBusc = new JLabel("DNI a buscar:");
-        lblDniBusc.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        lblDniBusc.setBounds(20, 27, 90, 20);
-        panelBusqueda.add(lblDniBusc);
-
-        txtBuscarDni = new JTextField();
-        txtBuscarDni.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        txtBuscarDni.setBounds(110, 25, 180, 26);
-        panelBusqueda.add(txtBuscarDni);
-
-        JButton btnBuscar = new JButton("Buscar Historial");
-        btnBuscar.setBackground(new Color(23, 162, 184)); // Cyan Informativo
-        btnBuscar.setForeground(Color.WHITE);
-        btnBuscar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnBuscar.setFocusPainted(false);
-        btnBuscar.setBounds(310, 24, 150, 28);
-        btnBuscar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panelBusqueda.add(btnBuscar);
-
-        // --- PANEL 2: FICHA TÉCNICA DEL PACIENTE ---
-        JPanel panelFicha = new JPanel();
-        panelFicha.setBackground(Color.WHITE);
-        panelFicha.setBorder(new TitledBorder(new LineBorder(new Color(180, 180, 180), 1, true), "2. Ficha del Paciente (Ley N.º 29733)", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0, 102, 204)));
-        panelFicha.setBounds(20, 155, 545, 130);
-        contentPane.add(panelFicha);
+        // FICHA TÉCNICA (Alineación corregida y ampliada)
+        JPanel panelFicha = new JPanel(); panelFicha.setBackground(Color.WHITE); panelFicha.setBorder(new TitledBorder(new LineBorder(new Color(180,180,180), 1, true), "2. Ficha Técnica (Ley N.º 29733)", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0,102,204))); 
+        panelFicha.setBounds(20, 175, 420, 180); 
+        contentPane.add(panelFicha); 
         panelFicha.setLayout(null);
-
-        JLabel lblHC = new JLabel("N° Historia:");
-        lblHC.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        lblHC.setBounds(20, 25, 80, 20);
-        panelFicha.add(lblHC);
         
-        txtHC = crearCampoLectura(100, 25, 150);
-        panelFicha.add(txtHC);
+        JLabel lHC = new JLabel("N° HC:"); lHC.setBounds(20,30,60,20); panelFicha.add(lHC); txtHC = crTxt(80,28,100); panelFicha.add(txtHC);
+        JLabel lDni = new JLabel("DNI Seg:"); lDni.setBounds(200,30,70,20); panelFicha.add(lDni); txtDniSeguro = crTxt(270,28,130); panelFicha.add(txtDniSeguro);
+        
+        JLabel lNom = new JLabel("Nombres:"); lNom.setBounds(20,65,70,20); panelFicha.add(lNom); txtNombres = crTxt(90,63,310); panelFicha.add(txtNombres);
+        JLabel lApe = new JLabel("Apellidos:"); lApe.setBounds(20,100,70,20); panelFicha.add(lApe); txtApellidos = crTxt(90,98,310); panelFicha.add(txtApellidos);
+        
+        JLabel lFec = new JLabel("F. Nac:"); lFec.setBounds(20,135,60,20); panelFicha.add(lFec); txtFechaNac = crTxt(80,133,100); panelFicha.add(txtFechaNac);
+        JLabel lTel = new JLabel("Celular:"); lTel.setBounds(200,135,70,20); panelFicha.add(lTel); txtTelefono = crTxt(270,133,130); panelFicha.add(txtTelefono);
 
-        JLabel lblDniSeguro = new JLabel("DNI Seguro:");
-        lblDniSeguro.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        lblDniSeguro.setBounds(270, 25, 80, 20);
-        panelFicha.add(lblDniSeguro);
+        // GESTIÓN DE ESTADOS
+        JPanel panelEst = new JPanel(); panelEst.setBackground(Color.WHITE); panelEst.setBorder(new TitledBorder(new LineBorder(new Color(180,180,180), 1, true), "3. Gestión de Estados", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0,102,204))); panelEst.setBounds(20, 365, 420, 110); contentPane.add(panelEst); panelEst.setLayout(null);
+        JLabel lCita = new JLabel("Cita:"); lCita.setBounds(20,30,40,20); panelEst.add(lCita); cbxCitas = new JComboBox<>(); cbxCitas.setBounds(60,28,340,25); panelEst.add(cbxCitas);
+        cbxEstado = new JComboBox<>(new String[]{"En Proceso / Pendiente", "Consulta Finalizada", "Cancelada"}); cbxEstado.setBounds(20,65,250,25); panelEst.add(cbxEstado);
+        JButton btnAct = new JButton("Actualizar"); btnAct.setBackground(new Color(40,167,69)); btnAct.setForeground(Color.WHITE); btnAct.setBounds(280,65,120,25); panelEst.add(btnAct);
 
-        txtDniSeguro = crearCampoLectura(350, 25, 175);
-        panelFicha.add(txtDniSeguro);
+        JButton btnVolver = new JButton("Volver al Menú Principal"); btnVolver.setBackground(new Color(108,117,125)); btnVolver.setForeground(Color.WHITE); btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14)); btnVolver.setBounds(20, 490, 420, 45); contentPane.add(btnVolver);
 
-        JLabel lblNombres = new JLabel("Nombres:");
-        lblNombres.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        lblNombres.setBounds(20, 60, 80, 20);
-        panelFicha.add(lblNombres);
+        // COLUMNA DERECHA (Consola)
+        JScrollPane scr = new JScrollPane(); scr.setBounds(460, 85, 480, 450); contentPane.add(scr);
+        txtConsola = new JTextArea(); txtConsola.setFont(new Font("Monospaced", Font.PLAIN, 13)); txtConsola.setEditable(false); scr.setViewportView(txtConsola);
 
-        txtNombres = crearCampoLectura(100, 60, 150);
-        panelFicha.add(txtNombres);
+        // EVENTOS
+        btnBuscar.addActionListener(e -> {
+            txtHC.setText(""); txtDniSeguro.setText(""); txtNombres.setText(""); txtApellidos.setText(""); txtFechaNac.setText(""); txtTelefono.setText(""); txtConsola.setText(""); cbxCitas.removeAllItems(); listaCitasActual.clear();
+            Optional<Paciente> pOpt = FrmRegistro.dbPacientesMock.stream().filter(p -> p.getDni() != null && p.getDni().equals(txtBuscarDni.getText().trim())).findFirst();
+            if (pOpt.isPresent()) {
+                pacienteActual = pOpt.get(); txtHC.setText(pacienteActual.getNumeroHistoriaClinica()); txtDniSeguro.setText(pacienteActual.getDniEnmascarado()); txtNombres.setText(pacienteActual.getNombres()); txtApellidos.setText(pacienteActual.getApellidos()); txtTelefono.setText(pacienteActual.getTelefono() != null ? pacienteActual.getTelefono() : "N/A"); txtFechaNac.setText(pacienteActual.getFechaNacimiento() != null ? pacienteActual.getFechaNacimiento().format(FMT_F) : "N/A");
+                listaCitasActual = pacienteActual.getCitasMedicas(); for (CitaMedica c : listaCitasActual) cbxCitas.addItem(c.getIdCita() + " - " + c.getFechaHora().toLocalDate().format(FMT_F));
+                imprimirHistorial();
+            } else { pacienteActual = null; JOptionPane.showMessageDialog(this, "No se encontró paciente."); }
+        });
 
-        JLabel lblApellidos = new JLabel("Apellidos:");
-        lblApellidos.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        lblApellidos.setBounds(270, 60, 80, 20);
-        panelFicha.add(lblApellidos);
-
-        txtApellidos = crearCampoLectura(350, 60, 175);
-        panelFicha.add(txtApellidos);
-
-        JLabel lblFechaNac = new JLabel("Fecha Nac.:");
-        lblFechaNac.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        lblFechaNac.setBounds(20, 95, 80, 20);
-        panelFicha.add(lblFechaNac);
-
-        txtFechaNac = crearCampoLectura(100, 95, 150);
-        panelFicha.add(txtFechaNac);
-
-        JLabel lblTel = new JLabel("Teléfono:");
-        lblTel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        lblTel.setBounds(270, 95, 80, 20);
-        panelFicha.add(lblTel);
-
-        txtTelefono = crearCampoLectura(350, 95, 175);
-        panelFicha.add(txtTelefono);
-
-        // --- PANEL 3: CAMBIO DE ESTADO DE CITAS (Para el Médico) ---
-        JPanel panelEstado = new JPanel();
-        panelEstado.setBackground(Color.WHITE);
-        panelEstado.setBorder(new TitledBorder(new LineBorder(new Color(180, 180, 180), 1, true), "3. Gestión y Estado de Citas", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0, 102, 204)));
-        panelEstado.setBounds(20, 295, 545, 80);
-        contentPane.add(panelEstado);
-        panelEstado.setLayout(null);
-
-        JLabel lblSelCita = new JLabel("Seleccionar Cita:");
-        lblSelCita.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        lblSelCita.setBounds(20, 30, 100, 20);
-        panelEstado.add(lblSelCita);
-
-        cbxCitas = new JComboBox<>();
-        cbxCitas.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        cbxCitas.setBounds(120, 28, 160, 25);
-        panelEstado.add(cbxCitas);
-
-        cbxEstado = new JComboBox<>(new String[]{"En Proceso / Pendiente", "Consulta Finalizada", "Cancelada"});
-        cbxEstado.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        cbxEstado.setBounds(290, 28, 150, 25);
-        panelEstado.add(cbxEstado);
-
-        btnActualizarEstado = new JButton("Actualizar");
-        btnActualizarEstado.setBackground(new Color(40, 167, 69)); // Verde
-        btnActualizarEstado.setForeground(Color.WHITE);
-        btnActualizarEstado.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnActualizarEstado.setFocusPainted(false);
-        btnActualizarEstado.setBounds(450, 28, 80, 25);
-        panelEstado.add(btnActualizarEstado);
-
-        // --- PANEL 4: CONSOLA DE HISTORIAL ---
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(20, 390, 545, 230);
-        contentPane.add(scrollPane);
-
-        txtConsola = new JTextArea();
-        txtConsola.setFont(new Font("Monospaced", Font.PLAIN, 13));
-        txtConsola.setEditable(false);
-        txtConsola.setLineWrap(true);
-        txtConsola.setWrapStyleWord(true);
-        scrollPane.setViewportView(txtConsola);
-
-        // --- BOTÓN FOOTER ---
-        JButton btnVolver = new JButton("Volver al Menú Principal");
-        btnVolver.setBackground(new Color(108, 117, 125));
-        btnVolver.setForeground(Color.WHITE);
-        btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnVolver.setFocusPainted(false);
-        btnVolver.setBounds(20, 630, 545, 35);
-        btnVolver.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        contentPane.add(btnVolver);
-
-        // ==========================================
-        // EVENTOS Y LÓGICA FUNCIONAL
-        // ==========================================
-
-        btnBuscar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String dniBuscado = txtBuscarDni.getText().trim();
-                limpiarFicha();
-
-                try {
-                    // Programación funcional para buscar al paciente
-                    Optional<Paciente> pacienteEncontrado = FrmRegistro.dbPacientesMock.stream()
-                        .filter(p -> p.getDni() != null && p.getDni().equals(dniBuscado))
-                        .findFirst();
-
-                    if (pacienteEncontrado.isPresent()) {
-                        pacienteActual = pacienteEncontrado.get();
-                        
-                        // Rellenar Ficha Técnica
-                        txtHC.setText(pacienteActual.getNumeroHistoriaClinica());
-                        txtDniSeguro.setText(pacienteActual.getDniEnmascarado()); // Aplicando Ley de Datos
-                        txtNombres.setText(pacienteActual.getNombres());
-                        txtApellidos.setText(pacienteActual.getApellidos());
-                        txtTelefono.setText(pacienteActual.getTelefono() != null ? pacienteActual.getTelefono() : "No registrado");
-                        txtFechaNac.setText(pacienteActual.getFechaNacimiento() != null ? pacienteActual.getFechaNacimiento().format(FMT_FECHA) : "No registrada");
-
-                        cargarComboCitas();
-                        imprimirHistorialCompleto();
-                        
-                    } else {
-                        pacienteActual = null;
-                        JOptionPane.showMessageDialog(null, "No se encontró ningún paciente con el DNI: " + dniBuscado, "Aviso", JOptionPane.WARNING_MESSAGE);
-                    }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Error en la búsqueda.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+        btnAct.addActionListener(e -> {
+            if(pacienteActual != null && cbxCitas.getSelectedIndex() >= 0) {
+                CitaMedica c = listaCitasActual.get(cbxCitas.getSelectedIndex()); String est = (String) cbxEstado.getSelectedItem();
+                if(est.contains("Pendiente")) c.setEstado(CitaMedica.EstadoCita.PENDIENTE); else if(est.contains("Finalizada")) c.setEstado(CitaMedica.EstadoCita.ATENDIDA); else c.setEstado(CitaMedica.EstadoCita.CANCELADA);
+                JOptionPane.showMessageDialog(this, "Estado actualizado."); imprimirHistorial();
             }
         });
 
-        // Evento para actualizar el estado de la cita seleccionada
-        btnActualizarEstado.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if(pacienteActual == null || listaCitasActual.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Primero debe buscar un paciente con citas.", "Aviso", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-
-                int index = cbxCitas.getSelectedIndex();
-                if(index >= 0) {
-                    CitaMedica citaSeleccionada = listaCitasActual.get(index);
-                    String estadoTexto = (String) cbxEstado.getSelectedItem();
-                    
-                    // Mapeamos el texto amigable de la UI a los Enum reales del Backend
-                    if(estadoTexto.equals("En Proceso / Pendiente")) {
-                        citaSeleccionada.setEstado(CitaMedica.EstadoCita.PENDIENTE);
-                    } else if(estadoTexto.equals("Consulta Finalizada")) {
-                        citaSeleccionada.setEstado(CitaMedica.EstadoCita.ATENDIDA);
-                    } else {
-                        citaSeleccionada.setEstado(CitaMedica.EstadoCita.CANCELADA);
-                    }
-
-                    JOptionPane.showMessageDialog(null, "Estado de la cita actualizado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    imprimirHistorialCompleto(); // Refrescar la consola
-                }
+        cbxCitas.addActionListener(e -> {
+            if(cbxCitas.getSelectedIndex() >= 0) {
+                switch(listaCitasActual.get(cbxCitas.getSelectedIndex()).getEstado()) { case PENDIENTE: cbxEstado.setSelectedIndex(0); break; case ATENDIDA: cbxEstado.setSelectedIndex(1); break; case CANCELADA: cbxEstado.setSelectedIndex(2); break; }
             }
         });
-
-        // Evento que escucha cuando el usuario selecciona otra cita en el combo
-        cbxCitas.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int index = cbxCitas.getSelectedIndex();
-                if(index >= 0 && index < listaCitasActual.size()) {
-                    CitaMedica cita = listaCitasActual.get(index);
-                    // Actualizar el combo de estados para que coincida con la cita seleccionada
-                    switch(cita.getEstado()) {
-                        case PENDIENTE: cbxEstado.setSelectedIndex(0); break;
-                        case ATENDIDA: cbxEstado.setSelectedIndex(1); break;
-                        case CANCELADA: cbxEstado.setSelectedIndex(2); break;
-                    }
-                }
-            }
-        });
-
-        btnVolver.addActionListener(e -> {
-            new FrmPrincipal().setVisible(true);
-            dispose();
-        });
+        btnVolver.addActionListener(e -> { new FrmPrincipal().setVisible(true); dispose(); });
     }
 
-    // ==========================================
-    // MÉTODOS AUXILIARES (CLEAN CODE)
-    // ==========================================
+    private JTextField crTxt(int x, int y, int w) { JTextField t = new JTextField(); t.setBounds(x,y,w,25); t.setEditable(false); t.setBackground(new Color(240,245,250)); return t; }
 
-    private JTextField crearCampoLectura(int x, int y, int width) {
-        JTextField txt = new JTextField();
-        txt.setBounds(x, y, width, 25);
-        txt.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        txt.setEditable(false);
-        txt.setBackground(new Color(240, 245, 250));
-        return txt;
-    }
-
-    private void limpiarFicha() {
-        txtHC.setText(""); txtDniSeguro.setText("");
-        txtNombres.setText(""); txtApellidos.setText("");
-        txtFechaNac.setText(""); txtTelefono.setText("");
-        txtConsola.setText("");
-        cbxCitas.removeAllItems();
-        listaCitasActual.clear();
-    }
-
-    private void cargarComboCitas() {
-        cbxCitas.removeAllItems();
-        listaCitasActual = pacienteActual.getCitasMedicas(); // Traemos todas las citas
-        
-        for (CitaMedica cita : listaCitasActual) {
-            cbxCitas.addItem(cita.getIdCita() + " - " + cita.getFechaHora().toLocalDate().format(FMT_FECHA));
-        }
-    }
-
-    private void imprimirHistorialCompleto() {
-        txtConsola.setText("==============================================================\n");
-        txtConsola.append("            HISTORIAL CLÍNICO Y REGISTRO DE CITAS            \n");
-        txtConsola.append("==============================================================\n\n");
-        
-        if (listaCitasActual.isEmpty()) {
-            txtConsola.append(" El paciente no tiene ninguna cita registrada en el sistema.\n");
-            return;
-        }
-
-        // Aplicamos un ForEach funcional para recorrer las citas
+    private void imprimirHistorial() {
+        txtConsola.setText("==============================================================\n            HISTORIAL CLÍNICO Y REGISTRO DE CITAS\n==============================================================\n\n");
         listaCitasActual.forEach(cita -> {
-            txtConsola.append("» CITA ID: " + cita.getIdCita() + "\n");
-            txtConsola.append("  Fecha y Hora : " + cita.getFechaHora().format(FMT_FECHAHORA) + "\n");
-            txtConsola.append("  Motivo       : " + cita.getMotivoConsulta() + "\n");
-            
-            // Transformar el Enum backend a un texto amigable para el reporte
-            String estadoVisual = cita.getEstado() == CitaMedica.EstadoCita.PENDIENTE ? "EN PROCESO / PENDIENTE" :
-                                 (cita.getEstado() == CitaMedica.EstadoCita.ATENDIDA ? "CONSULTA FINALIZADA" : "CANCELADA");
-            txtConsola.append("  Estado       : [" + estadoVisual + "]\n");
-
-            // --- LÓGICA AVANZADA: Buscar qué médico atendió esta cita específica ---
-            // Revisamos en todos los médicos quién tiene esta cita en su lista de "citasAsignadas"
-            Optional<Medico> medicoTratante = FrmAtencion.dbMedicosMock.stream()
-                .filter(m -> m.getCitasAsignadas().contains(cita))
-                .findFirst();
-
-            if (medicoTratante.isPresent()) {
-                txtConsola.append("  Atendido por : " + medicoTratante.get().getNombreCompleto() + " (" + medicoTratante.get().getEspecialidad() + ")\n");
-            } else {
-                txtConsola.append("  Atendido por : [Pendiente de asignación médica]\n");
-            }
-
-            // Si la cita ya tiene diagnóstico y tratamiento
-            if(cita.getAtencionMedica() != null) {
-                txtConsola.append("  -- Informe Médico:\n");
-                txtConsola.append("     Diagnóstico : " + cita.getAtencionMedica().getDiagnostico() + "\n");
-                txtConsola.append("     Tratamiento : " + cita.getAtencionMedica().getTratamiento() + "\n");
-            }
+            txtConsola.append("» CITA ID: " + cita.getIdCita() + "\n  Fecha    : " + cita.getFechaHora().format(FMT_FH) + "\n  Motivo   : " + cita.getMotivoConsulta() + "\n  Estado   : [" + (cita.getEstado() == CitaMedica.EstadoCita.PENDIENTE ? "EN PROCESO" : (cita.getEstado() == CitaMedica.EstadoCita.ATENDIDA ? "FINALIZADA" : "CANCELADA")) + "]\n");
+            Optional<Medico> med = FrmAtencion.dbMedicosMock.stream().filter(m -> m.getCitasAsignadas().contains(cita)).findFirst();
+            txtConsola.append("  Médico   : " + (med.isPresent() ? med.get().getNombreCompleto() + " (" + med.get().getEspecialidad() + ")" : "[No asignado]") + "\n");
+            if(cita.getAtencionMedica() != null) txtConsola.append("  -- Informe:\n     Diag: " + cita.getAtencionMedica().getDiagnostico() + "\n     Trat: " + cita.getAtencionMedica().getTratamiento() + "\n");
             txtConsola.append("--------------------------------------------------------------\n");
         });
     }
