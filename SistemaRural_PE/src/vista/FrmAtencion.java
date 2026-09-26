@@ -45,16 +45,19 @@ public class FrmAtencion extends JFrame {
     private static final DateTimeFormatter FMT_HORA = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     static {
+        // Datos en duro con números de CMP realistas
         String[] nombres = {"Carlos", "Ana Luisa", "Roberto", "Lucía", "Jorge"};
         String[] apellidos = {"Torres", "Pineda", "Fernández", "Ramírez", "Castillo"};
         String[] esp = {"Medicina General", "Pediatría", "Ginecología", "Cardiología", "Traumatología"};
+        String[] cmps = {"CMP-55210", "CMP-61023", "CMP-48991", "CMP-70112", "CMP-33104"};
         
         for (int i = 0; i < 5; i++) { 
             Medico m = new Medico(); 
             m.setNombres(nombres[i]); 
             m.setApellidos(apellidos[i]); 
             m.setEspecialidad(esp[i]); 
-            m.setCmp("CMP-" + (5000+i)); 
+            m.setCmp(cmps[i]); 
+            // Conceptualmente asumimos que todos estos doctores pasaron el filtro de "CMP Activo"
             dbMedicosMock.add(m); 
         }
         
@@ -105,7 +108,6 @@ public class FrmAtencion extends JFrame {
         JLabel lblMedico = new JLabel("Médico Turno:"); lblMedico.setFont(new Font("Segoe UI", Font.PLAIN, 13)); lblMedico.setBounds(20, 30, 100, 20); panelId.add(lblMedico);
         cbxMedicos = new JComboBox<>(); cbxMedicos.setBounds(115, 28, 295, 25);
         
-        // --- ASIGNACIÓN DINÁMICA DEL TÍTULO (Dr. / Dra.) ---
         for(Medico m : dbMedicosMock) {
             String prefijo = m.getNombres().trim().endsWith("a") ? "Dra. " : "Dr. ";
             cbxMedicos.addItem(prefijo + m.getNombreCompleto() + " (" + m.getEspecialidad() + ")");
@@ -198,14 +200,26 @@ public class FrmAtencion extends JFrame {
             if (txtNombrePaciente.getText().isEmpty() || txtDiagnostico.getText().isEmpty()) return;
             Medico ms = dbMedicosMock.get(cbxMedicos.getSelectedIndex()); Medicamento medS = dbMedicamentosMock.get(cbxMedicamentos.getSelectedIndex());
             
-            // Dinamizamos también el título para la firma del ticket
             String prefijo = ms.getNombres().trim().endsWith("a") ? "Dra. " : "Dr. ";
             
-            String t = "==========================================\nRECETA MÉDICA - MINSA RURAL\n==========================================\n" +
-            "Paciente : " + txtNombrePaciente.getText() + "\nFecha    : " + txtFechaHora.getText() + "\n" +
-            "DIAGNÓSTICO:\n" + txtDiagnostico.getText() + "\n\nFARMACIA:\n➤ " + spnCantidad.getValue() + "x " + medS.getNombre() + "\n==========================================\n" +
-            "Firma : " + prefijo + ms.getNombreCompleto() + " (" + ms.getCmp() + ")\n==========================================";
+            // Ticket mejorado con detalle completo del médico y validación CMP activa
+            String t = "==========================================\n" +
+                       "       RECETA MÉDICA - MINSA RURAL        \n" +
+                       "==========================================\n" +
+                       "Paciente : " + txtNombrePaciente.getText() + "\n" +
+                       "Fecha    : " + txtFechaHora.getText() + "\n" +
+                       "------------------------------------------\n" +
+                       "DIAGNÓSTICO:\n" + txtDiagnostico.getText() + "\n\n" +
+                       "FARMACIA / TRATAMIENTO:\n" + 
+                       "➤ " + spnCantidad.getValue() + "x " + medS.getNombre() + "\n" +
+                       "Indicaciones: " + txtTratamiento.getText() + "\n" +
+                       "==========================================\n" +
+                       "Firma Médico : " + prefijo + ms.getNombreCompleto() + "\n" +
+                       "Especialidad : " + ms.getEspecialidad() + "\n" +
+                       "Colegiatura  : " + ms.getCmp() + " [ACTIVO]\n" +
+                       "==========================================";
             JOptionPane.showMessageDialog(this, t, "Impresora Virtual", JOptionPane.INFORMATION_MESSAGE);
+            
             txtDni.setText(""); txtNombrePaciente.setText(""); txtDiagnostico.setText(""); txtTratamiento.setText("");
         });
         btnVolver.addActionListener(e -> { new FrmPrincipal().setVisible(true); dispose(); });
