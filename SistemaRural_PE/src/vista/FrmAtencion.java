@@ -104,7 +104,12 @@ public class FrmAtencion extends JFrame {
 
         JLabel lblMedico = new JLabel("Médico Turno:"); lblMedico.setFont(new Font("Segoe UI", Font.PLAIN, 13)); lblMedico.setBounds(20, 30, 100, 20); panelId.add(lblMedico);
         cbxMedicos = new JComboBox<>(); cbxMedicos.setBounds(115, 28, 295, 25);
-        for(Medico m : dbMedicosMock) cbxMedicos.addItem("Dr/a. " + m.getNombreCompleto() + " (" + m.getEspecialidad() + ")");
+        
+        // --- ASIGNACIÓN DINÁMICA DEL TÍTULO (Dr. / Dra.) ---
+        for(Medico m : dbMedicosMock) {
+            String prefijo = m.getNombres().trim().endsWith("a") ? "Dra. " : "Dr. ";
+            cbxMedicos.addItem(prefijo + m.getNombreCompleto() + " (" + m.getEspecialidad() + ")");
+        }
         panelId.add(cbxMedicos);
 
         JLabel lblDni = new JLabel("DNI Paciente:"); lblDni.setFont(new Font("Segoe UI", Font.PLAIN, 13)); lblDni.setBounds(20, 70, 90, 20); panelId.add(lblDni);
@@ -176,12 +181,9 @@ public class FrmAtencion extends JFrame {
                     int cant = (Integer) spnCantidad.getValue();
                     if (cant > medS.getStockDisponible()) { JOptionPane.showMessageDialog(this, "Stock insuficiente."); return; }
                     
-                    // --- AQUÍ ESTÁ LA CORRECCIÓN CLAVE ---
-                    // Registramos la cita en el historial personal del médico para que FrmConsulta pueda encontrarlo
                     if (!ms.getCitasAsignadas().contains(cita)) {
                         ms.getCitasAsignadas().add(cita);
                     }
-                    // -------------------------------------
 
                     ms.atenderCita(cita); 
                     AtencionMedica atencion = cita.getAtencionMedica(); atencion.setDiagnostico(txtDiagnostico.getText()); atencion.setTratamiento(txtTratamiento.getText());
@@ -195,10 +197,14 @@ public class FrmAtencion extends JFrame {
         btnImprimir.addActionListener(e -> {
             if (txtNombrePaciente.getText().isEmpty() || txtDiagnostico.getText().isEmpty()) return;
             Medico ms = dbMedicosMock.get(cbxMedicos.getSelectedIndex()); Medicamento medS = dbMedicamentosMock.get(cbxMedicamentos.getSelectedIndex());
+            
+            // Dinamizamos también el título para la firma del ticket
+            String prefijo = ms.getNombres().trim().endsWith("a") ? "Dra. " : "Dr. ";
+            
             String t = "==========================================\nRECETA MÉDICA - MINSA RURAL\n==========================================\n" +
             "Paciente : " + txtNombrePaciente.getText() + "\nFecha    : " + txtFechaHora.getText() + "\n" +
             "DIAGNÓSTICO:\n" + txtDiagnostico.getText() + "\n\nFARMACIA:\n➤ " + spnCantidad.getValue() + "x " + medS.getNombre() + "\n==========================================\n" +
-            "Firma : " + ms.getNombreCompleto() + " (" + ms.getCmp() + ")\n==========================================";
+            "Firma : " + prefijo + ms.getNombreCompleto() + " (" + ms.getCmp() + ")\n==========================================";
             JOptionPane.showMessageDialog(this, t, "Impresora Virtual", JOptionPane.INFORMATION_MESSAGE);
             txtDni.setText(""); txtNombrePaciente.setText(""); txtDiagnostico.setText(""); txtTratamiento.setText("");
         });
