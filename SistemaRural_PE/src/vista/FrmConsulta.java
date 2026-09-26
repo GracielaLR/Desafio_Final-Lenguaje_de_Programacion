@@ -40,59 +40,41 @@ public class FrmConsulta extends JFrame {
     public FrmConsulta() {
         setTitle("Archivo Clínico - Historiales");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // Ampliamos la ventana a 1050px para lograr una ficha técnica perfecta
         setBounds(100, 100, 1050, 620); 
         setLocationRelativeTo(null);
-        contentPane = new JPanel();
-        contentPane.setBackground(new Color(245, 247, 250));
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(contentPane);
-        contentPane.setLayout(null);
+        contentPane = new JPanel(); contentPane.setBackground(new Color(245, 247, 250)); contentPane.setLayout(null); setContentPane(contentPane);
 
-        // HEADER
         JPanel panelHeader = new JPanel(); panelHeader.setBackground(new Color(0, 102, 204)); panelHeader.setBounds(0, 0, 1050, 70); contentPane.add(panelHeader); panelHeader.setLayout(null);
         JLabel lblTitulo = new JLabel("ARCHIVO CLÍNICO Y GESTIÓN DE ESTADOS"); lblTitulo.setHorizontalAlignment(SwingConstants.CENTER); lblTitulo.setForeground(Color.WHITE); lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22)); lblTitulo.setBounds(0, 18, 1034, 30); panelHeader.add(lblTitulo);
 
-        // COLUMNA IZQUIERDA (Ahora mide 460px de ancho)
         JPanel panelBusq = new JPanel(); panelBusq.setBackground(Color.WHITE); panelBusq.setBorder(new TitledBorder(new LineBorder(new Color(180,180,180), 1, true), "1. Buscar Paciente", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0,102,204))); panelBusq.setBounds(20, 85, 460, 80); contentPane.add(panelBusq); panelBusq.setLayout(null);
-        JLabel lblDniBusc = new JLabel("DNI:"); lblDniBusc.setFont(new Font("Segoe UI", Font.PLAIN, 13)); lblDniBusc.setBounds(20, 32, 40, 20); panelBusq.add(lblDniBusc);
-        txtBuscarDni = new JTextField(); txtBuscarDni.setFont(new Font("Segoe UI", Font.BOLD, 14)); txtBuscarDni.setBounds(60, 30, 200, 28); panelBusq.add(txtBuscarDni);
+        JLabel lblDniBusc = new JLabel("DNI:"); lblDniBusc.setBounds(20, 32, 40, 20); panelBusq.add(lblDniBusc); txtBuscarDni = new JTextField(); txtBuscarDni.setFont(new Font("Segoe UI", Font.BOLD, 14)); txtBuscarDni.setBounds(60, 30, 200, 28); panelBusq.add(txtBuscarDni);
         JButton btnBuscar = new JButton("Buscar Historial"); btnBuscar.setBackground(new Color(23, 162, 184)); btnBuscar.setForeground(Color.WHITE); btnBuscar.setBounds(275, 30, 160, 28); panelBusq.add(btnBuscar);
 
-        // FICHA TÉCNICA (Distribución simétrica y espaciosa)
-        JPanel panelFicha = new JPanel(); panelFicha.setBackground(Color.WHITE); panelFicha.setBorder(new TitledBorder(new LineBorder(new Color(180,180,180), 1, true), "2. Ficha Técnica (Ley N.º 29733)", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0,102,204))); 
-        panelFicha.setBounds(20, 175, 460, 180); 
-        contentPane.add(panelFicha); 
-        panelFicha.setLayout(null);
-        
+        JPanel panelFicha = new JPanel(); panelFicha.setBackground(Color.WHITE); panelFicha.setBorder(new TitledBorder(new LineBorder(new Color(180,180,180), 1, true), "2. Ficha Técnica (Ley N.º 29733)", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0,102,204))); panelFicha.setBounds(20, 175, 460, 180); contentPane.add(panelFicha); panelFicha.setLayout(null);
         JLabel lHC = new JLabel("N° HC:"); lHC.setBounds(20,30,60,20); panelFicha.add(lHC); txtHC = crTxt(80,28,120); panelFicha.add(txtHC);
         JLabel lDni = new JLabel("DNI Seg:"); lDni.setBounds(220,30,70,20); panelFicha.add(lDni); txtDniSeguro = crTxt(290,28,150); panelFicha.add(txtDniSeguro);
-        
         JLabel lNom = new JLabel("Nombres:"); lNom.setBounds(20,65,70,20); panelFicha.add(lNom); txtNombres = crTxt(90,63,350); panelFicha.add(txtNombres);
         JLabel lApe = new JLabel("Apellidos:"); lApe.setBounds(20,100,70,20); panelFicha.add(lApe); txtApellidos = crTxt(90,98,350); panelFicha.add(txtApellidos);
-        
         JLabel lFec = new JLabel("F. Nac:"); lFec.setBounds(20,135,60,20); panelFicha.add(lFec); txtFechaNac = crTxt(80,133,120); panelFicha.add(txtFechaNac);
         JLabel lTel = new JLabel("Celular:"); lTel.setBounds(220,135,70,20); panelFicha.add(lTel); txtTelefono = crTxt(290,133,150); panelFicha.add(txtTelefono);
 
-        // GESTIÓN DE ESTADOS
         JPanel panelEst = new JPanel(); panelEst.setBackground(Color.WHITE); panelEst.setBorder(new TitledBorder(new LineBorder(new Color(180,180,180), 1, true), "3. Gestión de Estados", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0,102,204))); panelEst.setBounds(20, 365, 460, 110); contentPane.add(panelEst); panelEst.setLayout(null);
         JLabel lCita = new JLabel("Cita:"); lCita.setBounds(20,30,40,20); panelEst.add(lCita); cbxCitas = new JComboBox<>(); cbxCitas.setBounds(60,28,380,25); panelEst.add(cbxCitas);
         cbxEstado = new JComboBox<>(new String[]{"En Proceso / Pendiente", "Consulta Finalizada", "Cancelada"}); cbxEstado.setBounds(20,65,250,25); panelEst.add(cbxEstado);
         JButton btnAct = new JButton("Actualizar Estado"); btnAct.setBackground(new Color(40,167,69)); btnAct.setForeground(Color.WHITE); btnAct.setBounds(290,65,150,25); panelEst.add(btnAct);
 
-        JButton btnVolver = new JButton("Volver al Menú Principal"); btnVolver.setBackground(new Color(108,117,125)); btnVolver.setForeground(Color.WHITE); btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14)); btnVolver.setBounds(20, 490, 460, 45); contentPane.add(btnVolver);
+        JButton btnVolver = new JButton("Volver al Menú Principal"); btnVolver.setBackground(new Color(108,117,125)); btnVolver.setForeground(Color.WHITE); btnVolver.setBounds(20, 490, 460, 45); contentPane.add(btnVolver);
 
-        // COLUMNA DERECHA (Consola - Ahora empieza en el pixel 500)
         JScrollPane scr = new JScrollPane(); scr.setBounds(500, 85, 510, 450); contentPane.add(scr);
         txtConsola = new JTextArea(); txtConsola.setFont(new Font("Monospaced", Font.PLAIN, 13)); txtConsola.setEditable(false); scr.setViewportView(txtConsola);
 
-        // EVENTOS
         btnBuscar.addActionListener(e -> {
             txtHC.setText(""); txtDniSeguro.setText(""); txtNombres.setText(""); txtApellidos.setText(""); txtFechaNac.setText(""); txtTelefono.setText(""); txtConsola.setText(""); cbxCitas.removeAllItems(); listaCitasActual.clear();
             Optional<Paciente> pOpt = FrmRegistro.dbPacientesMock.stream().filter(p -> p.getDni() != null && p.getDni().equals(txtBuscarDni.getText().trim())).findFirst();
             if (pOpt.isPresent()) {
                 pacienteActual = pOpt.get(); txtHC.setText(pacienteActual.getNumeroHistoriaClinica()); txtDniSeguro.setText(pacienteActual.getDniEnmascarado()); txtNombres.setText(pacienteActual.getNombres()); txtApellidos.setText(pacienteActual.getApellidos()); txtTelefono.setText(pacienteActual.getTelefono() != null ? pacienteActual.getTelefono() : "N/A"); txtFechaNac.setText(pacienteActual.getFechaNacimiento() != null ? pacienteActual.getFechaNacimiento().format(FMT_F) : "N/A");
-                listaCitasActual = pacienteActual.getHistorialMedico().getCitas(); for (CitaMedica c : listaCitasActual) cbxCitas.addItem(c.getIdCita() + " - " + c.getFechaHora().toLocalDate().format(FMT_F));
+                listaCitasActual = pacienteActual.getCitasMedicas(); for (CitaMedica c : listaCitasActual) cbxCitas.addItem(c.getIdCita() + " - " + c.getFechaHora().toLocalDate().format(FMT_F));
                 imprimirHistorial();
             } else { pacienteActual = null; JOptionPane.showMessageDialog(this, "No se encontró paciente."); }
         });
@@ -119,9 +101,21 @@ public class FrmConsulta extends JFrame {
         txtConsola.setText("==============================================================\n            HISTORIAL CLÍNICO Y REGISTRO DE CITAS\n==============================================================\n\n");
         listaCitasActual.forEach(cita -> {
             txtConsola.append("» CITA ID: " + cita.getIdCita() + "\n  Fecha    : " + cita.getFechaHora().format(FMT_FH) + "\n  Motivo   : " + cita.getMotivoConsulta() + "\n  Estado   : [" + (cita.getEstado() == CitaMedica.EstadoCita.PENDIENTE ? "EN PROCESO" : (cita.getEstado() == CitaMedica.EstadoCita.ATENDIDA ? "FINALIZADA" : "CANCELADA")) + "]\n");
-            Optional<Medico> med = FrmAtencion.dbMedicosMock.stream().filter(m -> m.getCitasAsignadas().contains(cita)).findFirst();
-            txtConsola.append("  Médico   : " + (med.isPresent() ? med.get().getNombreCompleto() + " (" + med.get().getEspecialidad() + ")" : "[No asignado]") + "\n");
-            if(cita.getAtencionMedica() != null) txtConsola.append("  -- Informe:\n     Diag: " + cita.getAtencionMedica().getDiagnostico() + "\n     Trat: " + cita.getAtencionMedica().getTratamiento() + "\n");
+            txtConsola.append("  Especialidad : " + (cita.getEspecialidad() != null ? cita.getEspecialidad() : "No definida") + "\n");
+            
+            // Buscar médico
+            Optional<Medico> med = FrmRegistro.dbMedicosMock.stream().filter(m -> m.getCitasAsignadas().contains(cita)).findFirst();
+            if(med.isPresent()) {
+                String pref = med.get().getNombres().trim().endsWith("a") ? "Dra. " : "Dr. ";
+                txtConsola.append("  Atendido por : " + pref + med.get().getNombreCompleto() + "\n");
+            } else if (cita.getMedicoAsignado() != null) {
+                String pref = cita.getMedicoAsignado().getNombres().trim().endsWith("a") ? "Dra. " : "Dr. ";
+                txtConsola.append("  Derivado a   : " + pref + cita.getMedicoAsignado().getNombreCompleto() + " (En Espera)\n");
+            } else {
+                txtConsola.append("  Atendido por : [Pendiente]\n");
+            }
+
+            if(cita.getAtencionMedica() != null) txtConsola.append("  -- Informe Médico:\n     Diag: " + cita.getAtencionMedica().getDiagnostico() + "\n     Trat: " + cita.getAtencionMedica().getTratamiento() + "\n");
             txtConsola.append("--------------------------------------------------------------\n");
         });
     }
