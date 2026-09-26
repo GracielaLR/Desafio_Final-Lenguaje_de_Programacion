@@ -356,6 +356,7 @@ public class FrmRegistro extends JFrame {
                 FrmPrincipal principal = new FrmPrincipal();
                 principal.setVisible(true);
                 dispose();
+                
             }
         });
     }
