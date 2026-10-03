@@ -18,7 +18,11 @@ import javax.swing.border.EmptyBorder;
 
 public class FrmSistema extends JFrame {
 
-    private JPanel contentPane;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
     private JTextArea txtConsola;
 
     public static void main(String[] args) {
