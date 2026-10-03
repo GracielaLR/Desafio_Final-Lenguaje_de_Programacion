@@ -64,12 +64,7 @@ public class FrmRegistro extends JFrame {
         apiReniecMock.put("09458123", crearPac("09458123", "Julio César", "Flores Huamán", 1978, 11, 5));
         apiReniecMock.put("60192837", crearPac("60192837", "Daniela Andrea", "Pérez Castillo", 2001, 2, 18));
         apiReniecMock.put("42857193", crearPac("42857193", "Roberto Carlos", "Gutiérrez Quispe", 1989, 9, 30));
-        apiReniecMock.put("74456153", crearPac("74456153", "Aarón Keneth", "Gonzales Cortez", 2006, 2, 25));
-    
-        cargarPacientesDemo();
-        apiReniecMock.put("74456153", crearPac("74456153", "Aaron Keneth", "Gonzales Cortez", 2006, 2, 25));
-        apiReniecMock.put("75836620", crearPac("75836620", "Graciela Liz", "Ruiz Ramos", 2005, 10, 25));
-        apiReniecMock.put("70294511", crearPac("70294511", "Alejandro", "Huilcaya Dominguez", 2001, 6, 19));
+
     }
 
     private static Medico crearMedico(String n, String a, String e, String c) {
