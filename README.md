@@ -1,8 +1,6 @@
-
-```markdown
 # 🏥 Sistema Integral de Salud Rural - San Juan de Lurigancho
 
-Sistema de gestión médica desarrollado en **Java Swing** para un centro de salud rural, que cubre el flujo completo desde la recepción del paciente hasta la emisión de recetas médicas en PDF, aplicando buenas prácticas de arquitectura empresarial y protección de datos personales.
+Sistema de gestión médica desarrollado en Java Swing para un centro de salud rural, que cubre el flujo completo desde la recepción del paciente hasta la emisión de recetas médicas en PDF, aplicando buenas prácticas de arquitectura empresarial y protección de datos personales.
 
 ---
 
@@ -23,7 +21,7 @@ Este sistema simula la operación de un centro médico rural, permitiendo:
 
 El proyecto sigue el patrón **MVC (Modelo - Vista - Controlador)** organizado en dos paquetes principales:
 
-```
+```text
 src/
 ├── modelo/
 │   ├── Persona.java            (Clase abstracta base)
@@ -123,36 +121,6 @@ El sistema implementa el **enmascaramiento parcial del DNI** (`****1234`) en las
 
 ---
 
-## 🧪 Datos de Prueba
-
-El sistema incluye datos precargados para pruebas:
-
-**Pacientes demo con citas:**
-| DNI | Paciente | Estado |
-|-----|----------|--------|
-| 45721839 | Luis Miguel Rojas Cárdenas | Cita pendiente en Cardiología |
-| 71239485 | Carmen Sofía Chávez Ramírez | Cita pendiente en Medicina General |
-| 09458123 | Julio César Flores Huamán | Historial de Traumatología |
-| 60192837 | Daniela Andrea Pérez Castillo | Cita pendiente |
-| 42857193 | Roberto Carlos Gutiérrez Quispe | Historial de Cardiología |
-
-**DNIs válidos para simular API RENIEC:**
-`74456153`, `75836620`, `70294511`
-
----
-
-## 📸 Capturas del Sistema
-
-> *(Sección sugerida para agregar screenshots de los formularios)*
-
-- Dashboard Principal
-- Módulo de Recepción y Triaje
-- Módulo de Consultorio Médico
-- Módulo de Archivo Clínico
-- Receta PDF generada
-
----
-
 ## 👨‍💻 Autores
 
 - **Graciela Liz Ruiz Ramos**
@@ -174,7 +142,5 @@ Este proyecto fue desarrollado con fines académicos para el curso de **Arquitec
 ---
 
 > **Sistema Rural-PE © 2026** | Centro Médico – San Juan de Lurigancho
-```
 
 ---
-
