@@ -3,8 +3,11 @@ package vista;
 import modelo.*;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +31,16 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+// Importaciones de iText para generación de PDF
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.LineSeparator;
+
 public class FrmAtencion extends JFrame {
 
     private JPanel contentPane;
@@ -40,9 +53,15 @@ public class FrmAtencion extends JFrame {
     private static final DateTimeFormatter FMT_HORA = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     static {
-        String[] nMeds = {"Amoxicilina 500mg", "Paracetamol 500mg", "Ibuprofeno 400mg", "Omeprazol 20mg", "Azitromicina 250mg"};
-        int[] stks = {100, 200, 150, 80, 50};
-        for (int i = 0; i < 5; i++) { Medicamento med = new Medicamento(); med.setNombre(nMeds[i]); med.setStockDisponible(stks[i]); med.setFechaVencimiento(LocalDate.now().plusYears(2)); dbMedicamentosMock.add(med); }
+        String[] nMeds = {"Amoxicilina 500mg", "Paracetamol 500mg", "Ibuprofeno 400mg", "Omeprazol 20mg", "Azitromicina 250mg", "Cetirizina 10mg", "Clorfeniramina 4mg"};
+        int[] stks = {100, 200, 150, 80, 50, 30, 50};
+        for (int i = 0; i < 7; i++) { 
+            Medicamento med = new Medicamento(); 
+            med.setNombre(nMeds[i]); 
+            med.setStockDisponible(stks[i]); 
+            med.setFechaVencimiento(LocalDate.now().plusYears(2)); 
+            dbMedicamentosMock.add(med); 
+        }
     }
 
     public FrmAtencion() {
@@ -57,20 +76,16 @@ public class FrmAtencion extends JFrame {
         // COLUMNA IZQUIERDA
         JPanel panelId = new JPanel(); panelId.setBackground(Color.WHITE); panelId.setBorder(new TitledBorder(new LineBorder(new Color(180,180,180), 1, true), "1. Asignación y Paciente", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12), new Color(0, 102, 204))); panelId.setBounds(20, 85, 430, 180); contentPane.add(panelId); panelId.setLayout(null);
 
-        // 1. DNI
         JLabel lblDni = new JLabel("DNI Paciente:"); lblDni.setBounds(20, 30, 90, 20); panelId.add(lblDni);
         txtDni = new JTextField(); txtDni.setFont(new Font("Segoe UI", Font.BOLD, 14)); txtDni.setBounds(115, 28, 120, 25); panelId.add(txtDni);
         JButton btnBuscar = new JButton("Buscar"); btnBuscar.setBackground(new Color(108, 117, 125)); btnBuscar.setForeground(Color.WHITE); btnBuscar.setBounds(245, 28, 80, 25); panelId.add(btnBuscar);
 
-        // 2. PACIENTE
         JLabel lblPac = new JLabel("Paciente:"); lblPac.setBounds(20, 65, 90, 20); panelId.add(lblPac);
         txtNombrePaciente = new JTextField(); txtNombrePaciente.setEditable(false); txtNombrePaciente.setBackground(new Color(240, 245, 250)); txtNombrePaciente.setBounds(115, 63, 295, 25); panelId.add(txtNombrePaciente);
 
-        // 3. ESPECIALIDAD
         JLabel lblEsp = new JLabel("Especialidad:"); lblEsp.setBounds(20, 100, 90, 20); panelId.add(lblEsp);
         cbxEspecialidadTurno = new JComboBox<>(new String[]{"Medicina General", "Pediatría", "Ginecología", "Cardiología", "Traumatología"}); cbxEspecialidadTurno.setBounds(115, 98, 295, 25); panelId.add(cbxEspecialidadTurno);
 
-        // 4. MÉDICO
         JLabel lblMedico = new JLabel("Médico Turno:"); lblMedico.setBounds(20, 135, 90, 20); panelId.add(lblMedico);
         cbxMedicos = new JComboBox<>(); cbxMedicos.setBounds(115, 133, 295, 25); panelId.add(cbxMedicos);
 
@@ -88,7 +103,7 @@ public class FrmAtencion extends JFrame {
 
         // BOTONES
         JButton btnGuardar = new JButton("Guardar Atención Médica"); btnGuardar.setBackground(new Color(40, 167, 69)); btnGuardar.setForeground(Color.WHITE); btnGuardar.setFont(new Font("Segoe UI", Font.BOLD, 15)); btnGuardar.setBounds(470, 270, 440, 50); contentPane.add(btnGuardar);
-        JButton btnImprimir = new JButton("Imprimir Receta / Ticket"); btnImprimir.setBackground(new Color(23, 162, 184)); btnImprimir.setForeground(Color.WHITE); btnImprimir.setFont(new Font("Segoe UI", Font.BOLD, 15)); btnImprimir.setBounds(470, 340, 440, 50); contentPane.add(btnImprimir);
+        JButton btnImprimir = new JButton("Descargar Receta PDF"); btnImprimir.setBackground(new Color(23, 162, 184)); btnImprimir.setForeground(Color.WHITE); btnImprimir.setFont(new Font("Segoe UI", Font.BOLD, 15)); btnImprimir.setBounds(470, 340, 440, 50); contentPane.add(btnImprimir);
         JButton btnVolver = new JButton("Volver al Menú Principal"); btnVolver.setBackground(new Color(108, 117, 125)); btnVolver.setForeground(Color.WHITE); btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 15)); btnVolver.setBounds(470, 460, 440, 50); contentPane.add(btnVolver);
 
         // EVENTOS
@@ -100,7 +115,6 @@ public class FrmAtencion extends JFrame {
             if (p.isPresent()) { 
                 txtNombrePaciente.setText(p.get().getNombreCompleto()); txtFechaHora.setText(LocalDateTime.now().format(FMT_HORA)); 
                 
-                // --- LÓGICA DE AUTO-ENRUTAMIENTO DESDE TRIAJE ---
                 Optional<CitaMedica> cp = p.get().getCitasMedicas().stream().filter(c -> c.getEstado() == CitaMedica.EstadoCita.PENDIENTE).findFirst();
                 if(cp.isPresent() && cp.get().getEspecialidad() != null) {
                     cbxEspecialidadTurno.setSelectedItem(cp.get().getEspecialidad()); 
@@ -108,8 +122,6 @@ public class FrmAtencion extends JFrame {
                         String pref = cp.get().getMedicoAsignado().getNombres().trim().endsWith("a") ? "Dra. " : "Dr. ";
                         cbxMedicos.setSelectedItem(pref + cp.get().getMedicoAsignado().getNombreCompleto()); 
                     }
-                    
-                    // Bloqueamos la especialidad pero dejamos el médico libre por si hubo un cambio de turno
                     cbxEspecialidadTurno.setEnabled(false);
                     cbxMedicos.setEnabled(true);
                 }
@@ -147,21 +159,90 @@ public class FrmAtencion extends JFrame {
         });
         
         btnImprimir.addActionListener(e -> {
-            if (txtNombrePaciente.getText().isEmpty() || txtDiagnostico.getText().isEmpty()) return;
+            if (txtNombrePaciente.getText().isEmpty() || txtDiagnostico.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Registre la atención médica primero para generar la receta.", "Validación", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Recopilar datos
             String nombreSel = cbxMedicos.getSelectedItem().toString().replace("Dra. ", "").replace("Dr. ", "");
             Medico ms = FrmRegistro.dbMedicosMock.stream().filter(m -> m.getNombreCompleto().equals(nombreSel)).findFirst().orElse(null);
             Medicamento medS = dbMedicamentosMock.get(cbxMedicamentos.getSelectedIndex());
             String prefijo = ms.getNombres().trim().endsWith("a") ? "Dra. " : "Dr. ";
-            
-            String t = "==========================================\n       RECETA MÉDICA - MINSA RURAL\n==========================================\n" +
-            "Paciente : " + txtNombrePaciente.getText() + "\nFecha    : " + txtFechaHora.getText() + "\n------------------------------------------\n" +
-            "DIAGNÓSTICO:\n" + txtDiagnostico.getText() + "\n\nFARMACIA:\n➤ " + spnCantidad.getValue() + "x " + medS.getNombre() + "\n==========================================\n" +
-            "Firma : " + prefijo + ms.getNombreCompleto() + "\nCMP   : " + ms.getCmp() + " [ACTIVO]\n==========================================";
-            JOptionPane.showMessageDialog(this, t, "Impresora Virtual", JOptionPane.INFORMATION_MESSAGE);
-            
-            // Restablecemos el formulario para el siguiente paciente
-            txtDni.setText(""); txtNombrePaciente.setText(""); txtDiagnostico.setText(""); txtTratamiento.setText("");
-            cbxEspecialidadTurno.setEnabled(true);
+            int cant = (Integer) spnCantidad.getValue();
+
+            // Nombre del PDF
+            String nombreArchivo = "Receta_" + txtDni.getText().trim() + "_" + System.currentTimeMillis() + ".pdf";
+
+            try {
+                // Generación de PDF con iText
+                Document documento = new Document();
+                PdfWriter.getInstance(documento, new FileOutputStream(nombreArchivo));
+                documento.open();
+
+                // Definir fuentes
+                com.itextpdf.text.Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.DARK_GRAY);
+                com.itextpdf.text.Font fontSubtitulo = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.GRAY);
+                com.itextpdf.text.Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK);
+                com.itextpdf.text.Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
+
+                // Encabezado
+                Paragraph header = new Paragraph("MINISTERIO DE SALUD - RECETA MÉDICA", fontTitulo);
+                header.setAlignment(Element.ALIGN_CENTER);
+                documento.add(header);
+                
+                Paragraph subheader = new Paragraph("Centro de Salud Rural - San Juan de Lurigancho", fontSubtitulo);
+                subheader.setAlignment(Element.ALIGN_CENTER);
+                documento.add(subheader);
+                
+                documento.add(new Chunk("\n"));
+                LineSeparator separador = new LineSeparator();
+                separador.setLineColor(BaseColor.GRAY);
+                documento.add(new Chunk(separador));
+                documento.add(new Chunk("\n\n"));
+
+                // Datos del Paciente
+                documento.add(new Paragraph("DATOS DEL PACIENTE", fontBold));
+                documento.add(new Paragraph("Paciente: " + txtNombrePaciente.getText(), fontNormal));
+                documento.add(new Paragraph("DNI: " + txtDni.getText(), fontNormal));
+                documento.add(new Paragraph("Fecha de Atención: " + txtFechaHora.getText(), fontNormal));
+                documento.add(new Chunk("\n"));
+
+                // Diagnóstico y Tratamiento
+                documento.add(new Paragraph("DIAGNÓSTICO CLÍNICO", fontBold));
+                documento.add(new Paragraph(txtDiagnostico.getText(), fontNormal));
+                documento.add(new Chunk("\n"));
+                
+                documento.add(new Paragraph("PRESCRIPCIÓN FARMACÉUTICA", fontBold));
+                documento.add(new Paragraph("➤ " + cant + "x " + medS.getNombre(), fontNormal));
+                documento.add(new Paragraph("Indicaciones: " + txtTratamiento.getText(), fontNormal));
+                documento.add(new Chunk("\n\n\n\n\n")); // Espaciado para la firma
+
+                // Firma del Doctor
+                documento.add(new Chunk(separador));
+                Paragraph firma = new Paragraph("Firma y Sello del Médico Tratante\n" + prefijo + ms.getNombreCompleto() + "\nEspecialidad: " + ms.getEspecialidad() + "\nColegiatura: " + ms.getCmp() + " [ACTIVO]", fontNormal);
+                firma.setAlignment(Element.ALIGN_CENTER);
+                documento.add(firma);
+
+                documento.close();
+
+                // Abrir PDF automáticamente usando java.awt.Desktop
+                File archivoPDF = new File(nombreArchivo);
+                if (archivoPDF.exists()) {
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().open(archivoPDF);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "PDF guardado como: " + nombreArchivo);
+                    }
+                }
+                
+                // Limpieza de formulario post-impresión
+                txtDni.setText(""); txtNombrePaciente.setText(""); txtDiagnostico.setText(""); txtTratamiento.setText("");
+                cbxEspecialidadTurno.setEnabled(true);
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error crítico al generar el documento PDF: " + ex.getMessage(), "Error I/O", JOptionPane.ERROR_MESSAGE);
+            }
         });
         
         btnVolver.addActionListener(e -> { new FrmPrincipal().setVisible(true); dispose(); });
