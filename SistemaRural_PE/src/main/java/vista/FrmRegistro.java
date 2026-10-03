@@ -3,7 +3,6 @@ package vista;
 import modelo.*;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -27,13 +26,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 public class FrmRegistro extends JFrame {
 
-    private JPanel contentPane;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
     private JTextField txtDni, txtNombres, txtApellidos, txtTelefono, txtFechaNac;
     private JTextArea txtMotivo; 
     private JComboBox<String> cbxEspecialidad, cbxMedico;
@@ -64,12 +66,7 @@ public class FrmRegistro extends JFrame {
         apiReniecMock.put("09458123", crearPac("09458123", "Julio César", "Flores Huamán", 1978, 11, 5));
         apiReniecMock.put("60192837", crearPac("60192837", "Daniela Andrea", "Pérez Castillo", 2001, 2, 18));
         apiReniecMock.put("42857193", crearPac("42857193", "Roberto Carlos", "Gutiérrez Quispe", 1989, 9, 30));
-        apiReniecMock.put("74456153", crearPac("74456153", "Aarón Keneth", "Gonzales Cortez", 2006, 2, 25));
-    
-        cargarPacientesDemo();
-        apiReniecMock.put("74456153", crearPac("74456153", "Aaron Keneth", "Gonzales Cortez", 2006, 2, 25));
-        apiReniecMock.put("75836620", crearPac("75836620", "Graciela Liz", "Ruiz Ramos", 2005, 10, 25));
-        apiReniecMock.put("70294511", crearPac("70294511", "Alejandro", "Huilcaya Dominguez", 2001, 6, 19));
+
     }
 
     private static Medico crearMedico(String n, String a, String e, String c) {
@@ -79,93 +76,7 @@ public class FrmRegistro extends JFrame {
         Paciente p = new Paciente(); p.setDni(d); p.setNombres(n); p.setApellidos(a); p.setFechaNacimiento(LocalDate.of(y,m,d2)); return p;
     }
 
-    private static void cargarPacientesDemo() {
-        LocalDateTime hoy = LocalDateTime.now();
-        CitaMedica.EstadoCita ATEN = CitaMedica.EstadoCita.ATENDIDA;
-        CitaMedica.EstadoCita PEND = CitaMedica.EstadoCita.PENDIENTE;
-        CitaMedica.EstadoCita CANC = CitaMedica.EstadoCita.CANCELADA;
 
-        // 1. Luis Miguel: historial (con receta) + cita pendiente
-        Paciente p1 = registrarDemo("45721839", "Luis Miguel", "Rojas Cárdenas", 1985, 4, 12, "987654321");
-        agregarCitaDemo(p1, "Medicina General", "CMP-55210", "Dolor abdominal y acidez", hoy.minusMonths(3), ATEN,
-                "Gastritis leve", "Dieta blanda, evitar irritantes. Omeprazol 20mg cada 24 h en ayunas", "Omeprazol", 10);
-        agregarCitaDemo(p1, "Cardiología", "CMP-70112", "Palpitaciones ocasionales", hoy.minusDays(1), PEND,
-                null, null, null, 0);
-
-        // 2. Carmen Sofía: historial + control pendiente
-        Paciente p2 = registrarDemo("71239485", "Carmen Sofía", "Chávez Ramírez", 1992, 8, 25, "976543210");
-        agregarCitaDemo(p2, "Ginecología", "CMP-48992", "Control ginecológico anual", hoy.minusMonths(2), ATEN,
-                "Control normal, sin hallazgos", "Continuar controles anuales. Suplemento de ácido fólico", null, 0);
-        agregarCitaDemo(p2, "Medicina General", "CMP-55211", "Cefalea frecuente", hoy.minusHours(5), PEND,
-                null, null, null, 0);
-
-        // 3. Julio César: una atendida (con receta) y una cancelada
-        Paciente p3 = registrarDemo("09458123", "Julio César", "Flores Huamán", 1978, 11, 5, "965432109");
-        agregarCitaDemo(p3, "Traumatología", "CMP-33104", "Dolor en rodilla derecha tras caída", hoy.minusMonths(1), ATEN,
-                "Esguince de rodilla grado I", "Reposo relativo, hielo local, Ibuprofeno 400mg cada 8 h por 5 días", "Ibuprofeno", 15);
-        agregarCitaDemo(p3, "Traumatología", "CMP-33104", "Control de rodilla", hoy.minusDays(10), CANC,
-                null, null, null, 0);
-
-        // 4. Daniela Andrea: solo cita pendiente
-        Paciente p4 = registrarDemo("60192837", "Daniela Andrea", "Pérez Castillo", 2001, 2, 18, "954321098");
-        agregarCitaDemo(p4, "Medicina General", "CMP-55210", "Fiebre y malestar general desde hace 2 días", hoy.minusMinutes(30), PEND,
-                null, null, null, 0);
-
-        // 5. Roberto Carlos: historial largo (2 atenciones, la segunda con receta)
-        Paciente p5 = registrarDemo("42857193", "Roberto Carlos", "Gutiérrez Quispe", 1989, 9, 30, "943210987");
-        agregarCitaDemo(p5, "Cardiología", "CMP-70113", "Presión arterial elevada", hoy.minusMonths(6), ATEN,
-                "Hipertensión arterial leve", "Dieta baja en sodio, ejercicio moderado, control mensual de presión", null, 0);
-        agregarCitaDemo(p5, "Medicina General", "CMP-55211", "Tos y dolor de garganta", hoy.minusDays(20), ATEN,
-                "Faringitis aguda", "Azitromicina 250mg cada 24 h por 3 días, abundantes líquidos", "Azitromicina", 3);
-    }
-
-    private static Paciente registrarDemo(String dni, String nom, String ape, int y, int m, int d, String tel) {
-        Paciente p = crearPac(dni, nom, ape, y, m, d);
-        p.setTelefono(tel);
-        p.setNumeroHistoriaClinica("HC-" + (dbPacientesMock.size() + 1));
-        dbPacientesMock.add(p);
-        return p;
-    }
-
-    private static void agregarCitaDemo(Paciente p, String esp, String cmpMedico, String motivo, LocalDateTime fecha,
-                                        CitaMedica.EstadoCita estado, String diag, String trat,
-                                        String nomMedicamento, int cantidad) {
-        Medico med = dbMedicosMock.stream().filter(m -> m.getCmp().equals(cmpMedico)).findFirst().orElse(null);
-
-        CitaMedica c = new CitaMedica();
-        c.setIdCita("C" + (p.getCitasMedicas().size() + 1));
-        c.setFechaHora(fecha);
-        c.setMotivoConsulta(motivo);
-        c.setEspecialidad(esp);
-        c.setMedicoAsignado(med);
-        c.programarCita();
-        p.solicitarCita(c);
-
-        if (estado == CitaMedica.EstadoCita.ATENDIDA) {
-            med.getCitasAsignadas().add(c);
-            med.atenderCita(c);
-            AtencionMedica a = c.getAtencionMedica();
-            a.setFechaAtencion(fecha.plusMinutes(25));
-            a.setDiagnostico(diag);
-            a.setTratamiento(trat);
-
-            if (nomMedicamento != null) {
-                Medicamento mc = FrmAtencion.dbMedicamentosMock.stream()
-                        .filter(x -> x.getNombre().startsWith(nomMedicamento)).findFirst().orElse(null);
-                if (mc != null) {
-                    DetalleReceta d = new DetalleReceta();
-                    d.setMedicamento(mc);
-                    d.setCantidad(cantidad);
-                    d.setIndicaciones(trat);
-                    med.emitirReceta(a, d);
-                }
-            }
-        } else if (estado == CitaMedica.EstadoCita.CANCELADA) {
-            c.cancelarCita();
-        }
-    }
-    
-    
     public FrmRegistro() {
         setTitle("Módulo de Recepción - Centro de Salud");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

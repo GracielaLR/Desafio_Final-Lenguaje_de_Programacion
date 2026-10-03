@@ -2,9 +2,7 @@ package vista;
 
 import modelo.*;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Desktop;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,7 +25,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
@@ -43,7 +40,11 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 
 public class FrmAtencion extends JFrame {
 
-    private JPanel contentPane;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
     private JTextField txtDni, txtNombrePaciente, txtFechaHora;
     private JTextArea txtDiagnostico, txtTratamiento;
     private JComboBox<String> cbxEspecialidadTurno, cbxMedicos, cbxMedicamentos;

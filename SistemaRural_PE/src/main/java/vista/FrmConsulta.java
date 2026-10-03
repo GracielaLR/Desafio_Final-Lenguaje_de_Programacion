@@ -2,7 +2,6 @@ package vista;
 
 import modelo.*;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.time.format.DateTimeFormatter;
@@ -20,13 +19,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 public class FrmConsulta extends JFrame {
 
-    private JPanel contentPane;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
     private JTextField txtBuscarDni, txtHC, txtNombres, txtApellidos, txtDniSeguro, txtFechaNac, txtTelefono;
     private JTextArea txtConsola;
     private JComboBox<String> cbxCitas, cbxEstado;
