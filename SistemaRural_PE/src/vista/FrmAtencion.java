@@ -40,7 +40,7 @@ public class FrmAtencion extends JFrame {
     private static final DateTimeFormatter FMT_HORA = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     static {
-        String[] nMeds = {"Amoxicilina 500mg", "Paracetamol 500mg", "Ibuprofeno 400mg", "Omeprazol 20mg", "Azitromicina 250mg"};
+        String[] nMeds = {"Amoxicilina 500mg", "Paracetamol 500mg", "Ibuprofeno 400mg", "Omeprazol 20mg", "Azitromicina 250mg", "Cetirizina 10mg", "Clorfeniramina 4mg"};
         int[] stks = {100, 200, 150, 80, 50};
         for (int i = 0; i < 5; i++) { Medicamento med = new Medicamento(); med.setNombre(nMeds[i]); med.setStockDisponible(stks[i]); med.setFechaVencimiento(LocalDate.now().plusYears(2)); dbMedicamentosMock.add(med); }
     }
