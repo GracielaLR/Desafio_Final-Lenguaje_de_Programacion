@@ -131,7 +131,7 @@ El sistema implementa el **enmascaramiento parcial del DNI** (`****1234`) en las
 
 ## 📄 Licencia
 
-Este proyecto fue desarrollado con fines académicos para el curso de **Arquitectura Empresarial**.
+Este proyecto fue desarrollado con fines académicos para el curso de **Lenguajes de Programación**.
 
 ---
 
